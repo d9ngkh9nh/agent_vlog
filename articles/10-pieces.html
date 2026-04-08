@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The 10 Pieces I Actually Wear Every Single Week — Clozet</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #faf8f4;
+      --ink:      #1c1410;
+      --ink-60:   rgba(28,20,16,0.60);
+      --ink-40:   rgba(28,20,16,0.40);
+      --ink-10:   rgba(28,20,16,0.10);
+      --accent:   #7c3aed;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Nav ── */
+    .glass-nav {
+      background: rgba(250,248,244,0.88);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--ink-10);
+    }
+    .nav-link {
+      color: var(--ink-60); font-size: 14px; text-decoration: none;
+      transition: color 0.18s;
+    }
+    .nav-link:hover { color: var(--ink); }
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      color: var(--ink-60); font-size: 13px; font-weight: 500;
+      text-decoration: none; transition: color 0.18s, gap 0.18s;
+    }
+    .back-btn:hover { color: var(--ink); gap: 10px; }
+    .back-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+
+    /* ── Hero ── */
+    .hero-wrap {
+      position: relative;
+      height: min(80vh, 680px);
+      overflow: hidden;
+      background: #1a0f2e;
+    }
+    .hero-img {
+      width: 100%; height: 100%; object-fit: cover;
+      opacity: 0.55;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(10,6,20,0.30) 0%,
+        rgba(10,6,20,0.10) 35%,
+        rgba(10,6,20,0.72) 72%,
+        rgba(10,6,20,0.96) 100%
+      );
+    }
+    .hero-content {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: clamp(28px, 5vw, 72px) clamp(20px, 6vw, 120px) clamp(40px, 6vw, 72px);
+      max-width: 900px;
+    }
+    .hero-eyebrow {
+      font-size: 10px; font-weight: 700; letter-spacing: .10em;
+      text-transform: uppercase; color: rgba(192,132,252,0.9);
+      margin-bottom: 16px;
+    }
+    .hero-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(30px, 5.5vw, 62px);
+      font-weight: 700;
+      line-height: 1.09;
+      letter-spacing: -0.01em;
+      color: #fff;
+      margin-bottom: 20px;
+    }
+    .hero-meta {
+      display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+      font-size: 12px; color: rgba(255,255,255,0.52); font-weight: 400;
+    }
+    .hero-meta span { display: flex; align-items: center; gap: 6px; }
+    .hero-meta .dot { width: 3px; height: 3px; border-radius: 50%; background: rgba(255,255,255,0.28); }
+
+    /* ── Article body ── */
+    .article-body {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 72px 24px 100px;
+    }
+
+    /* Drop cap */
+    .drop-cap::first-letter {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 4.8em;
+      font-weight: 700;
+      line-height: 0.78;
+      float: left;
+      margin: 4px 12px 0 0;
+      color: var(--ink);
+    }
+
+    .lead-para {
+      font-size: 19px;
+      line-height: 1.76;
+      color: var(--ink);
+      font-weight: 400;
+      margin-bottom: 36px;
+    }
+
+    .body-para {
+      font-size: 16px;
+      line-height: 1.84;
+      color: var(--ink-60);
+      margin-bottom: 26px;
+    }
+
+    /* Pull quote */
+    .pull-quote {
+      margin: 52px 0;
+      padding: 0 0 0 28px;
+      border-left: 3px solid var(--accent);
+    }
+    .pull-quote blockquote {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(20px, 3vw, 26px);
+      font-style: italic;
+      font-weight: 600;
+      line-height: 1.45;
+      color: var(--ink);
+    }
+    .pull-quote cite {
+      display: block;
+      margin-top: 12px;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--ink-40);
+    }
+
+    /* Item section */
+    .item-section {
+      margin: 60px 0;
+    }
+    .item-number {
+      font-size: 11px; font-weight: 700; letter-spacing: .10em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .item-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      margin-bottom: 18px;
+      color: var(--ink);
+    }
+
+    /* Photo blocks */
+    .photo-full {
+      margin: 44px -24px;
+      overflow: hidden;
+      border-radius: 0;
+    }
+    .photo-full img {
+      width: 100%; display: block;
+      height: clamp(280px, 50vw, 520px);
+      object-fit: cover;
+    }
+    .photo-caption {
+      font-size: 11px; color: var(--ink-40); font-weight: 400;
+      text-align: center; margin-top: 10px; letter-spacing: .02em;
+    }
+
+    .photo-pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 44px 0;
+    }
+    .photo-pair img {
+      width: 100%; display: block; border-radius: 14px;
+      height: 260px; object-fit: cover;
+    }
+
+    .photo-side {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 32px;
+      align-items: start;
+      margin: 52px 0;
+    }
+    .photo-side img {
+      width: 100%; display: block; border-radius: 14px;
+      aspect-ratio: 3/4; object-fit: cover;
+    }
+
+    /* Divider */
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--ink-10) 20%, var(--ink-10) 80%, transparent);
+      margin: 56px 0;
+    }
+
+    /* Tag strip */
+    .tag-strip {
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+      margin: 0 0 52px;
+    }
+    .tag {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      border: 1px solid var(--ink-10);
+      font-size: 11px; font-weight: 600; color: var(--ink-60);
+      letter-spacing: .04em;
+    }
+
+    /* Shop the story */
+    .shop-section {
+      background: #f0ece4;
+      border-radius: 24px;
+      padding: 44px 36px;
+      margin: 64px 0 0;
+    }
+    .shop-eyebrow {
+      font-size: 10px; font-weight: 700; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--ink-40);
+      margin-bottom: 24px;
+    }
+    .shop-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 14px;
+    }
+    .shop-item {
+      background: var(--bg);
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid rgba(28,20,16,0.07);
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-decoration: none;
+      color: inherit;
+    }
+    .shop-item:hover { transform: translateY(-3px); box-shadow: 0 10px 32px rgba(28,20,16,0.10); }
+    .shop-item img { width: 100%; height: 130px; object-fit: cover; display: block; }
+    .shop-item-info { padding: 10px 12px 12px; }
+    .shop-item-name { font-size: 12px; font-weight: 600; line-height: 1.35; }
+    .shop-item-label { font-size: 10px; color: var(--ink-40); margin-top: 3px; }
+
+    /* Author byline */
+    .byline {
+      display: flex; align-items: center; gap: 14px;
+      padding: 28px 0;
+      border-top: 1px solid var(--ink-10);
+      border-bottom: 1px solid var(--ink-10);
+      margin-bottom: 52px;
+    }
+    .byline-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      object-fit: cover; flex-shrink: 0;
+      background: #e0d9f0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .byline-name { font-size: 14px; font-weight: 700; }
+    .byline-date { font-size: 12px; color: var(--ink-40); margin-top: 2px; }
+
+    /* More articles */
+    .more-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 18px;
+      margin-top: 28px;
+    }
+    .more-card {
+      border-radius: 18px; overflow: hidden;
+      border: 1px solid var(--ink-10);
+      background: rgba(255,255,255,0.65);
+      backdrop-filter: blur(12px);
+      transition: transform 0.22s, box-shadow 0.22s;
+      text-decoration: none; color: inherit;
+    }
+    .more-card:hover { transform: translateY(-4px); box-shadow: 0 16px 44px rgba(28,20,16,0.09); }
+    .more-card img { width: 100%; height: 160px; object-fit: cover; display: block; }
+    .more-card-body { padding: 16px; }
+    .more-card-tag { font-size: 10px; font-weight: 700; color: var(--accent); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 6px; }
+    .more-card-title { font-size: 15px; font-weight: 700; line-height: 1.35; }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--ink-10);
+      padding: 32px 24px 36px;
+    }
+
+    @media (max-width: 640px) {
+      .photo-pair  { grid-template-columns: 1fr; }
+      .photo-side  { grid-template-columns: 1fr; }
+      .shop-section { padding: 28px 20px; }
+    }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: rgba(28,20,16,0.15); border-radius: 5px; }
+  </style>
+</head>
+<body>
+
+<!-- ── Nav ── -->
+<header class="glass-nav" style="position:sticky;top:0;z-index:50;">
+  <div style="max-width:1200px;margin:0 auto;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;">
+    <a href="../index.html" class="back-btn" aria-label="Back to Clozet home">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Back to Clozet
+    </a>
+    <a href="../index.html" style="text-decoration:none;display:flex;align-items:center;gap:7px;">
+      <svg width="15" height="12" viewBox="0 0 17 14" fill="none" stroke="#1c1410" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M8.5 1C8.5 1 11 1 11 3C11 4.2 10 5 8.5 5"/>
+        <path d="M8.5 5L1 12.5H16L8.5 5Z"/>
+      </svg>
+      <span style="font-size:14px;font-weight:700;color:#1c1410;">Clozet</span>
+    </a>
+    <a href="../index.html#newsletter" class="nav-link" style="font-size:13px;font-weight:500;">Subscribe</a>
+  </div>
+</header>
+
+<!-- ── Hero ── -->
+<div class="hero-wrap">
+  <img src="https://placehold.co/1400x680/1a0f2e/7c3aed?text=✦" alt="Article hero — wardrobe essentials" class="hero-img">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Style Diaries · Apr 1, 2026</p>
+    <h1 class="hero-title">The 10 Pieces I Actually<br>Wear Every Single Week</h1>
+    <div class="hero-meta">
+      <span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        Alex Nguyen
+      </span>
+      <span class="dot"></span>
+      <span>5 min read</span>
+      <span class="dot"></span>
+      <span>Style Diaries</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── Article body ── -->
+<article class="article-body">
+
+  <!-- Byline -->
+  <div class="byline">
+    <div class="byline-avatar" style="overflow:hidden;">
+      <img src="https://placehold.co/44x44/ede9fe/7c3aed?text=A" alt="Alex Nguyen" style="width:44px;height:44px;object-fit:cover;">
+    </div>
+    <div>
+      <div class="byline-name">Alex Nguyen</div>
+      <div class="byline-date">April 1, 2026 · 5 min read</div>
+    </div>
+  </div>
+
+  <!-- Tags -->
+  <div class="tag-strip">
+    <span class="tag">Style Diaries</span>
+    <span class="tag">Capsule Wardrobe</span>
+    <span class="tag">Essentials</span>
+    <span class="tag">Wardrobe Edit</span>
+  </div>
+
+  <!-- Intro -->
+  <p class="lead-para drop-cap">
+    Do you ever open your wardrobe and feel like you have nothing to wear, even though there's stuff everywhere?
+    I've been there. For years, actually. It took a brutal wardrobe audit, a lot of donation bags, and one very
+    honest mirror moment for me to finally figure out what I was actually reaching for — and what was just
+    taking up space.
+  </p>
+
+  <p class="body-para">
+    What I discovered after tracking my outfits for two full months straight (yes, I kept a spreadsheet — no
+    shame) was that the same 10 pieces kept showing up, week after week, in different combinations. Everything
+    else was essentially furniture.
+  </p>
+
+  <p class="body-para">
+    These aren't the most glamorous pieces I own. They're not even the most expensive. But they're the ones
+    that make me feel like myself every time I put them on — and that, I think, is the whole point.
+  </p>
+
+  <!-- Pull quote -->
+  <div class="pull-quote">
+    <blockquote>
+      "Style isn't about having more. It's about having the perfect version of exactly what you actually need."
+    </blockquote>
+    <cite>— Alex Nguyen, Clozet</cite>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- Item 1 -->
+  <div class="item-section">
+    <div class="item-number">01 / The Foundation</div>
+    <h2 class="item-title">The Perfect White Tee</h2>
+    <p class="body-para">
+      Before you roll your eyes — hear me out. I've tried dozens of white tees. Boxy ones, fitted ones, oversized
+      vintage ones from dusty thrift bins. The right one is genuinely life-changing. Mine is 100% heavy-weight cotton
+      with a slightly relaxed fit and a crew neck that doesn't bag out after three washes.
+    </p>
+    <p class="body-para">
+      I wear it tucked into trousers, knotted over a midi skirt, layered under an open blazer. It's the quiet
+      workhorse of my wardrobe and the piece I'd repurchase without hesitation if it disappeared tomorrow.
+    </p>
+
+    <div class="photo-full">
+      <img src="https://placehold.co/900x420/f5f0ea/b0a090?text=White+Tee+Editorial" alt="White tee styling editorial">
+      <p class="photo-caption">A perfectly weighted white tee — the kind that goes with absolutely everything.</p>
+    </div>
+  </div>
+
+  <!-- Item 2 -->
+  <div class="item-section">
+    <div class="item-number">02 / The Workhorse</div>
+    <h2 class="item-title">High-Waisted Straight-Leg Jeans</h2>
+
+    <div class="photo-side">
+      <img src="https://placehold.co/400x530/ddd8d0/9a9088?text=Jeans+Shot" alt="High-waisted straight jeans">
+      <div>
+        <p class="body-para">
+          Not skinny. Not flared. Not wide-leg. Just a clean, straight cut that hits right at the ankle and
+          sits high enough to elongate without being uncomfortable. A medium-to-dark wash is key — versatile
+          enough for a coffee run and sharp enough for a dinner reservation.
+        </p>
+        <p class="body-para">
+          The denim has structure — it holds its shape through a full day without going baggy at the knees.
+          I could write an essay on the denim industry's relationship with stretch fabric, but I'll spare you.
+          All I'll say is: try a pair with at most 2% elastane. You'll feel the difference.
+        </p>
+        <p class="body-para">
+          Worn with the white tee and ankle boots, this is my default "I need to look like I tried without
+          actually trying" combination. It hasn't failed me once.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Item 3 -->
+  <div class="item-section">
+    <div class="item-number">03 / The Comfort Upgrade</div>
+    <h2 class="item-title">A Cashmere (or Cashmere-Blend) Sweater</h2>
+    <p class="body-para">
+      I used to think cashmere was a luxury I couldn't justify. Then I bought one good one — a neutral oatmeal
+      crewneck — and I have never looked back. The secret is buying one neutral shade you'll reach for constantly
+      rather than a fun colour that only works with half your wardrobe.
+    </p>
+    <p class="body-para">
+      Mine goes over a collared shirt, tied loosely over my shoulders in summer, tucked into trousers when I need
+      to look intentional. It washes beautifully on a wool cycle and somehow gets better with age. This is the
+      piece that makes a good outfit feel elevated without any extra effort.
+    </p>
+
+    <div class="photo-pair">
+      <img src="https://placehold.co/380x260/f0ece4/b0a890?text=Sweater+Flat+Lay" alt="Cashmere sweater flat lay" style="border-radius:14px;">
+      <img src="https://placehold.co/380x260/e8e4dc/a09888?text=Sweater+Styled" alt="Cashmere sweater styled" style="border-radius:14px;">
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- Item 4 -->
+  <div class="item-section">
+    <div class="item-number">04 / The Statement Layer</div>
+    <h2 class="item-title">A Tailored Blazer in Camel or Cream</h2>
+    <p class="body-para">
+      If there's one piece that transitions seasons effortlessly, it's a well-cut blazer in a warm neutral.
+      I wear mine open over a tee, belted over a slip dress, or draped over my shoulders when I want that
+      effortless-French-girl thing that Instagram makes look very casual but is actually very calculated.
+    </p>
+    <p class="body-para">
+      Key fit details: the shoulders should sit exactly right (not the most exciting advice, but the most
+      honest one), the sleeves should fall just at the wrist, and there should be enough room in the chest
+      to layer without it pulling.
+    </p>
+  </div>
+
+  <!-- Item 5 -->
+  <div class="item-section">
+    <div class="item-number">05 / The Outerwear</div>
+    <h2 class="item-title">A Trench Coat That Fits Like It Was Made for You</h2>
+
+    <div class="photo-full">
+      <img src="https://placehold.co/900x480/e8e0d8/988070?text=Trench+Coat+Editorial" alt="Trench coat editorial styling">
+      <p class="photo-caption">The trench coat: the only outerwear you'll ever truly need in a temperate climate.</p>
+    </div>
+
+    <p class="body-para">
+      I live in Hanoi. Our "winter" is aggressive humidity and the occasional chill that makes you feel dramatic
+      for wearing a coat. And yet — I wear my trench constantly. It works over everything: jeans, dresses,
+      pyjama trousers when I'm getting groceries at 8am and hoping nobody I know is there.
+    </p>
+    <p class="body-para">
+      A classic khaki/camel trench is the move. Double-breasted, belted, knee-length. The proportions matter
+      enormously. Try it before you buy it, and make sure you can move your arms without the whole thing
+      lifting like a cape.
+    </p>
+  </div>
+
+  <!-- Item 6 -->
+  <div class="item-section">
+    <div class="item-number">06 / The Easy Dress</div>
+    <h2 class="item-title">A Silk (or Silk-Like) Slip Dress</h2>
+
+    <div class="photo-side" style="grid-template-columns:1.1fr 1fr;">
+      <div>
+        <p class="body-para">
+          The slip dress is having a permanent moment because it genuinely works for everything. Worn alone in
+          summer. Layered over a turtleneck in winter. Dressed up with heels, dressed down with vintage sneakers
+          and a hoodie layered underneath.
+        </p>
+        <p class="body-para">
+          Mine is a bias-cut midi in a champagne-adjacent neutral. It moves beautifully and somehow photographs
+          like I spent much more time getting dressed than I actually did. The goal.
+        </p>
+      </div>
+      <img src="https://placehold.co/400x500/ede8e0/a09080?text=Slip+Dress+Shot" alt="Silk slip dress">
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- Items 7–10 condensed -->
+  <div class="item-section">
+    <div class="item-number">07 — 10</div>
+    <h2 class="item-title">The Final Four: Quiet but Essential</h2>
+    <p class="body-para">
+      The last four pieces are quieter — they don't lead the outfit, but remove them and everything falls apart.
+      Together they form the backbone of how I actually get dressed every morning.
+    </p>
+  </div>
+
+  <div class="photo-pair">
+    <div style="border-radius:14px;overflow:hidden;border:1px solid rgba(28,20,16,0.07);">
+      <img src="https://placehold.co/380x220/e4e0d8/908880?text=Ankle+Boots" alt="Classic ankle boots" style="width:100%;height:220px;object-fit:cover;display:block;border-radius:0;">
+      <div style="padding:14px 16px;background:#fff;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#7c3aed;margin-bottom:4px;">07</div>
+        <div style="font-size:14px;font-weight:700;margin-bottom:5px;">Classic Ankle Boots</div>
+        <p style="font-size:12px;color:rgba(28,20,16,0.56);line-height:1.6;">A pointed or almond toe in black or tan leather. The shoe that makes every single outfit look finished. Non-negotiable.</p>
+      </div>
+    </div>
+
+    <div style="border-radius:14px;overflow:hidden;border:1px solid rgba(28,20,16,0.07);">
+      <img src="https://placehold.co/380x220/dedad2/807870?text=Leather+Tote" alt="Simple leather tote" style="width:100%;height:220px;object-fit:cover;display:block;border-radius:0;">
+      <div style="padding:14px 16px;background:#fff;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#7c3aed;margin-bottom:4px;">08</div>
+        <div style="font-size:14px;font-weight:700;margin-bottom:5px;">A Simple Leather Tote</div>
+        <p style="font-size:12px;color:rgba(28,20,16,0.56);line-height:1.6;">Structured enough to hold its shape, large enough to hold your life. In tan, black, or a warm cognac. This is your daily bag.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="photo-pair" style="margin-top:14px;">
+    <div style="border-radius:14px;overflow:hidden;border:1px solid rgba(28,20,16,0.07);">
+      <img src="https://placehold.co/380x220/e8e4dc/989080?text=Linen+Shirt" alt="Striped linen shirt" style="width:100%;height:220px;object-fit:cover;display:block;border-radius:0;">
+      <div style="padding:14px 16px;background:#fff;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#7c3aed;margin-bottom:4px;">09</div>
+        <div style="font-size:14px;font-weight:700;margin-bottom:5px;">A Striped Linen Shirt</div>
+        <p style="font-size:12px;color:rgba(28,20,16,0.56);line-height:1.6;">Lightweight, breathable, works unbuttoned over a tee or tucked into trousers. The casual-smart crossover piece you'll wear to death.</p>
+      </div>
+    </div>
+
+    <div style="border-radius:14px;overflow:hidden;border:1px solid rgba(28,20,16,0.07);">
+      <img src="https://placehold.co/380x220/d8d4cc/706860?text=Wide+Leg+Trousers" alt="Black wide-leg trousers" style="width:100%;height:220px;object-fit:cover;display:block;border-radius:0;">
+      <div style="padding:14px 16px;background:#fff;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#7c3aed;margin-bottom:4px;">10</div>
+        <div style="font-size:14px;font-weight:700;margin-bottom:5px;">Black Wide-Leg Trousers</div>
+        <p style="font-size:12px;color:rgba(28,20,16,0.56);line-height:1.6;">Tailored enough for a meeting, relaxed enough for everything else. A high waist, a clean drape, and a hem that just skims the floor.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- Closing -->
+  <p class="body-para">
+    If I'm being honest, the hardest part of building a wardrobe that actually works isn't finding the right
+    pieces — it's letting go of the wrong ones. Every good outfit I wear now started with a clear-out, not
+    a shopping trip.
+  </p>
+  <p class="body-para">
+    These 10 pieces aren't magic. They just happen to fit well, work together, and make me feel like I have
+    my life together even when I absolutely do not. And honestly? That's everything I need from a wardrobe.
+  </p>
+  <p class="body-para" style="font-style:italic;color:rgba(28,20,16,0.50);">
+    Got your own wardrobe workhorses? I'd genuinely love to hear what makes the cut for you — drop it in the
+    newsletter reply, or find me on Instagram below.
+  </p>
+
+  <!-- Shop the story -->
+  <div class="shop-section">
+    <div class="shop-eyebrow">Shop the Story</div>
+    <div class="shop-grid">
+      <a href="#" class="shop-item">
+        <img src="https://placehold.co/160x130/f5f0ea/b0a090?text=White+Tee" alt="White tee">
+        <div class="shop-item-info">
+          <div class="shop-item-name">Classic White Tee</div>
+          <div class="shop-item-label">from $38</div>
+        </div>
+      </a>
+      <a href="#" class="shop-item">
+        <img src="https://placehold.co/160x130/ddd8d0/9a9088?text=Jeans" alt="Straight jeans">
+        <div class="shop-item-info">
+          <div class="shop-item-name">Straight-Leg Jeans</div>
+          <div class="shop-item-label">from $95</div>
+        </div>
+      </a>
+      <a href="#" class="shop-item">
+        <img src="https://placehold.co/160x130/f0ece4/b0a890?text=Cashmere" alt="Cashmere sweater">
+        <div class="shop-item-info">
+          <div class="shop-item-name">Cashmere Crew</div>
+          <div class="shop-item-label">from $120</div>
+        </div>
+      </a>
+      <a href="#" class="shop-item">
+        <img src="https://placehold.co/160x130/e8e4dc/a09888?text=Blazer" alt="Tailored blazer">
+        <div class="shop-item-info">
+          <div class="shop-item-name">Camel Blazer</div>
+          <div class="shop-item-label">from $180</div>
+        </div>
+      </a>
+      <a href="#" class="shop-item">
+        <img src="https://placehold.co/160x130/e8e0d8/988070?text=Trench" alt="Trench coat">
+        <div class="shop-item-info">
+          <div class="shop-item-name">Classic Trench</div>
+          <div class="shop-item-label">from $220</div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- More articles -->
+  <div style="margin-top:72px;">
+    <div style="font-size:11px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:rgba(28,20,16,0.40);margin-bottom:24px;">You Might Also Like</div>
+    <div class="more-grid">
+      <a href="#" class="more-card">
+        <img src="https://placehold.co/400x160/ccfbf1/0d9488?text=✦" alt="Thrift article">
+        <div class="more-card-body">
+          <div class="more-card-tag">Slow Fashion</div>
+          <div class="more-card-title">Second-Hand Finds: My Thrift Store Routine</div>
+        </div>
+      </a>
+      <a href="#" class="more-card">
+        <img src="https://placehold.co/400x160/fef3c7/b45309?text=✦" alt="Outfit review article">
+        <div class="more-card-body">
+          <div class="more-card-tag">Outfit Reviews</div>
+          <div class="more-card-title">Reviewing Every Outfit from My Last 30 Days</div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+</article>
+
+<!-- Footer -->
+<footer>
+  <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <svg width="14" height="11" viewBox="0 0 17 14" fill="none" stroke="rgba(28,20,16,0.45)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M8.5 1C8.5 1 11 1 11 3C11 4.2 10 5 8.5 5"/>
+        <path d="M8.5 5L1 12.5H16L8.5 5Z"/>
+      </svg>
+      <span style="font-size:13px;font-weight:700;color:rgba(28,20,16,0.45);">Clozet</span>
+    </div>
+    <div style="font-size:12px;color:rgba(28,20,16,0.30);">© 2026 Clozet. All rights reserved.</div>
+    <a href="../index.html" style="font-size:13px;color:rgba(28,20,16,0.50);text-decoration:none;font-weight:500;" onmouseover="this.style.color='#1c1410'" onmouseout="this.style.color='rgba(28,20,16,0.50)'">← Back to home</a>
+  </div>
+</footer>
+
+</body>
+</html>

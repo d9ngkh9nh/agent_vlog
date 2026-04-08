@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Second-Hand Finds: My Thrift Store Routine — Clozet</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #faf8f4;
+      --ink:     #1c1410;
+      --ink-60:  rgba(28,20,16,0.60);
+      --ink-40:  rgba(28,20,16,0.40);
+      --ink-10:  rgba(28,20,16,0.10);
+      --accent:  #0d9488;   /* teal — matches "Slow Fashion" tag */
+      --accent2: #7c3aed;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Reading progress bar ── */
+    #progress-bar {
+      position: fixed; top: 0; left: 0; height: 2px; width: 0%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      z-index: 100;
+      transition: width 0.1s linear;
+    }
+
+    /* ── Nav ── */
+    .glass-nav {
+      background: rgba(250,248,244,0.90);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--ink-10);
+    }
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      color: var(--ink-60); font-size: 13px; font-weight: 500;
+      text-decoration: none; transition: color 0.18s;
+    }
+    .back-btn:hover { color: var(--ink); }
+    .back-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+
+    /* ── Hero — centered editorial style ── */
+    .hero-outer {
+      background: #f0ece4;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: min(82vh, 660px);
+      overflow: hidden;
+    }
+    .hero-text-col {
+      display: flex; flex-direction: column; justify-content: center;
+      padding: clamp(40px, 6vw, 96px) clamp(28px, 5vw, 80px);
+    }
+    .hero-img-col {
+      position: relative; overflow: hidden;
+    }
+    .hero-img-col img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+    .hero-img-col::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, rgba(240,236,228,0.35) 0%, transparent 40%);
+    }
+    .hero-eyebrow {
+      font-size: 10px; font-weight: 700; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 22px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 24px; height: 1.5px;
+      background: var(--accent);
+    }
+    .hero-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(32px, 4.5vw, 58px);
+      font-weight: 700;
+      line-height: 1.08;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      margin-bottom: 24px;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--accent);
+    }
+    .hero-sub {
+      font-size: 15px;
+      color: var(--ink-60);
+      line-height: 1.72;
+      margin-bottom: 32px;
+      max-width: 380px;
+    }
+    .hero-meta {
+      display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+      font-size: 12px; color: var(--ink-40); font-weight: 400;
+    }
+    .hero-meta span { display: flex; align-items: center; gap: 5px; }
+    .hero-meta .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--ink-10); }
+
+    /* ── Article body ── */
+    .article-wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px 100px;
+      display: grid;
+      grid-template-columns: 1fr 240px;
+      gap: 72px;
+      align-items: start;
+    }
+    .article-main { padding-top: 72px; min-width: 0; }
+
+    /* ── Sticky sidebar ── */
+    .article-sidebar {
+      padding-top: 72px;
+      position: sticky;
+      top: 80px;
+    }
+    .sidebar-block {
+      background: rgba(255,255,255,0.70);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--ink-10);
+      border-radius: 18px;
+      padding: 22px 20px;
+      margin-bottom: 16px;
+    }
+    .sidebar-label {
+      font-size: 9px; font-weight: 700; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--ink-40);
+      margin-bottom: 14px;
+    }
+    .toc-link {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12px; color: var(--ink-60);
+      text-decoration: none; padding: 5px 0;
+      transition: color 0.18s;
+      border-left: 2px solid transparent;
+      padding-left: 10px;
+      line-height: 1.35;
+    }
+    .toc-link:hover { color: var(--ink); border-left-color: var(--accent); }
+    .toc-link.active { color: var(--accent); border-left-color: var(--accent); font-weight: 600; }
+    .sidebar-stat {
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .stat-row {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .stat-label { font-size: 11px; color: var(--ink-60); }
+    .stat-val   { font-size: 12px; font-weight: 700; }
+
+    /* ── Body type ── */
+    .lead-para {
+      font-size: 19px; line-height: 1.78; color: var(--ink);
+      font-weight: 400; margin-bottom: 32px;
+    }
+    .drop-cap::first-letter {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 4.8em; font-weight: 700;
+      line-height: 0.78; float: left;
+      margin: 4px 12px 0 0; color: var(--ink);
+    }
+    .body-para {
+      font-size: 16px; line-height: 1.86; color: var(--ink-60);
+      margin-bottom: 24px;
+    }
+
+    /* ── Centered pull quote (different from article 1) ── */
+    .pull-quote {
+      text-align: center;
+      margin: 60px 0;
+      padding: 0 24px;
+    }
+    .pull-quote blockquote {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(22px, 3.5vw, 32px);
+      font-style: italic;
+      font-weight: 500;
+      line-height: 1.42;
+      color: var(--ink);
+    }
+    .pull-quote blockquote::before { content: '\201C'; color: var(--accent); font-size: 1.4em; line-height: 0; vertical-align: -0.3em; margin-right: 4px; }
+    .pull-quote blockquote::after  { content: '\201D'; color: var(--accent); font-size: 1.4em; line-height: 0; vertical-align: -0.3em; margin-left: 4px; }
+    .pull-quote cite {
+      display: block; margin-top: 14px;
+      font-size: 11px; font-style: normal; font-weight: 600;
+      letter-spacing: .10em; text-transform: uppercase; color: var(--ink-40);
+    }
+
+    /* ── Section divider ── */
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--ink-10) 20%, var(--ink-10) 80%, transparent);
+      margin: 52px 0;
+    }
+
+    /* ── Shop card — the key design difference ── */
+    .shop-card {
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid var(--ink-10);
+      margin: 52px 0;
+    }
+    .shop-card-img {
+      position: relative;
+      height: clamp(200px, 35vw, 340px);
+      overflow: hidden;
+      background: #e8e0d0;
+    }
+    .shop-card-img img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform 0.5s;
+    }
+    .shop-card:hover .shop-card-img img { transform: scale(1.03); }
+    .shop-card-img-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(28,20,16,0.55) 0%, transparent 55%);
+    }
+    .shop-number-badge {
+      position: absolute; top: 18px; left: 18px;
+      background: var(--accent);
+      color: #fff; font-size: 11px; font-weight: 800;
+      letter-spacing: .06em; text-transform: uppercase;
+      padding: 5px 13px; border-radius: 9999px;
+    }
+    .shop-card-body {
+      padding: 28px 28px 24px;
+      background: #fff;
+    }
+    .shop-card-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      margin-bottom: 16px; gap: 12px;
+    }
+    .shop-name {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(20px, 2.5vw, 26px);
+      font-weight: 700; line-height: 1.15; color: var(--ink);
+    }
+    .shop-location {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 11px; color: var(--ink-60); font-weight: 500;
+      margin-top: 5px;
+    }
+    .shop-tags {
+      display: flex; gap: 6px; flex-wrap: wrap; flex-shrink: 0;
+    }
+    .shop-tag {
+      font-size: 10px; font-weight: 600; padding: 3px 10px;
+      border-radius: 9999px; border: 1px solid var(--ink-10);
+      color: var(--ink-60); white-space: nowrap;
+    }
+    .shop-tag.teal  { background: rgba(13,148,136,0.08); border-color: rgba(13,148,136,0.25); color: #0d9488; }
+    .shop-tag.amber { background: rgba(180,83,9,0.08);   border-color: rgba(180,83,9,0.25);   color: #b45309; }
+    .shop-tag.purple{ background: rgba(124,58,237,0.08); border-color: rgba(124,58,237,0.25); color: #7c3aed; }
+    .shop-card-desc { font-size: 15px; line-height: 1.80; color: var(--ink-60); margin-bottom: 18px; }
+    .shop-card-footer {
+      display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+      padding-top: 16px; border-top: 1px solid var(--ink-10);
+    }
+    .shop-detail { display: flex; flex-direction: column; gap: 2px; }
+    .shop-detail-label { font-size: 9px; font-weight: 700; letter-spacing: .10em; text-transform: uppercase; color: var(--ink-40); }
+    .shop-detail-val   { font-size: 12px; font-weight: 600; color: var(--ink); }
+
+    /* ── Inline tip callout ── */
+    .tip-callout {
+      background: rgba(13,148,136,0.07);
+      border: 1px solid rgba(13,148,136,0.18);
+      border-radius: 14px;
+      padding: 18px 20px;
+      margin: 32px 0;
+      display: flex; gap: 14px; align-items: flex-start;
+    }
+    .tip-icon {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--accent); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; flex-shrink: 0; margin-top: 1px;
+    }
+    .tip-text { font-size: 13px; line-height: 1.70; color: var(--ink); }
+    .tip-text strong { color: var(--accent); font-weight: 700; }
+
+    /* ── Checklist ── */
+    .checklist { margin: 0; padding: 0; list-style: none; }
+    .checklist li {
+      display: flex; align-items: flex-start; gap: 11px;
+      font-size: 15px; line-height: 1.60; color: var(--ink-60);
+      padding: 9px 0; border-bottom: 1px solid var(--ink-10);
+    }
+    .checklist li:last-child { border-bottom: none; }
+    .check-icon {
+      width: 18px; height: 18px; border-radius: 50%;
+      background: rgba(13,148,136,0.12); border: 1.5px solid var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 2px;
+    }
+    .check-icon svg { stroke: var(--accent); }
+
+    /* ── Photo blocks ── */
+    .photo-full { margin: 44px -24px; overflow: hidden; }
+    .photo-full img { width: 100%; display: block; height: clamp(240px, 45vw, 480px); object-fit: cover; }
+    .photo-caption { font-size: 11px; color: var(--ink-40); text-align: center; margin-top: 10px; letter-spacing: .02em; }
+
+    /* ── Tag strip ── */
+    .tag-strip { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 48px; }
+    .tag { display: inline-block; padding: 4px 12px; border-radius: 9999px; border: 1px solid var(--ink-10); font-size: 11px; font-weight: 600; color: var(--ink-60); letter-spacing: .04em; }
+
+    /* ── Byline ── */
+    .byline {
+      display: flex; align-items: center; gap: 14px;
+      padding: 24px 0; border-top: 1px solid var(--ink-10); border-bottom: 1px solid var(--ink-10);
+      margin-bottom: 44px;
+    }
+    .byline-name { font-size: 14px; font-weight: 700; }
+    .byline-date { font-size: 12px; color: var(--ink-40); margin-top: 2px; }
+
+    /* ── Newsletter banner ── */
+    .nl-banner {
+      background: linear-gradient(135deg, #e8f5f4 0%, #f0ece4 100%);
+      border: 1px solid rgba(13,148,136,0.18);
+      border-radius: 20px;
+      padding: 36px 32px;
+      text-align: center;
+      margin: 64px 0 0;
+    }
+    .nl-input {
+      flex: 1; background: rgba(255,255,255,0.80); border: 1px solid var(--ink-10);
+      border-radius: 9999px; padding: 11px 20px;
+      color: var(--ink); font-family: inherit; font-size: 14px;
+      outline: none; min-width: 0; transition: border-color 0.18s;
+    }
+    .nl-input::placeholder { color: var(--ink-40); }
+    .nl-input:focus { border-color: var(--accent); }
+    .btn-teal {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: var(--accent); color: #fff;
+      border-radius: 9999px; padding: 11px 22px;
+      font-weight: 600; font-size: 14px; border: none; cursor: pointer;
+      transition: background 0.18s, transform 0.12s;
+      flex-shrink: 0;
+    }
+    .btn-teal:hover  { background: #0f766e; }
+    .btn-teal:active { transform: scale(0.97); }
+
+    /* ── More articles ── */
+    .more-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; margin-top: 24px; }
+    .more-card { border-radius: 16px; overflow: hidden; border: 1px solid var(--ink-10); background: rgba(255,255,255,0.65); text-decoration: none; color: inherit; transition: transform 0.22s, box-shadow 0.22s; display: block; }
+    .more-card:hover { transform: translateY(-4px); box-shadow: 0 14px 40px rgba(28,20,16,0.09); }
+    .more-card img { width: 100%; height: 150px; object-fit: cover; display: block; }
+    .more-card-body { padding: 14px; }
+    .more-card-tag { font-size: 10px; font-weight: 700; color: var(--accent2); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 5px; }
+    .more-card-title { font-size: 14px; font-weight: 700; line-height: 1.35; }
+
+    /* ── Footer ── */
+    footer { border-top: 1px solid var(--ink-10); padding: 30px 24px 36px; }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .hero-outer   { grid-template-columns: 1fr; min-height: auto; }
+      .hero-img-col { height: 320px; }
+      .article-wrap { grid-template-columns: 1fr; gap: 0; }
+      .article-sidebar { display: none; }
+    }
+    @media (max-width: 640px) {
+      .shop-card-header { flex-direction: column; }
+      .shop-tags         { margin-top: 0; }
+      .nl-banner form    { flex-direction: column !important; }
+    }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: rgba(28,20,16,0.15); border-radius: 5px; }
+  </style>
+</head>
+<body>
+
+<!-- Reading progress bar -->
+<div id="progress-bar"></div>
+
+<!-- ── Nav ── -->
+<header class="glass-nav" style="position:sticky;top:0;z-index:50;">
+  <div style="max-width:1200px;margin:0 auto;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;">
+    <a href="../index.html" class="back-btn">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Back to Clozet
+    </a>
+    <a href="../index.html" style="text-decoration:none;display:flex;align-items:center;gap:7px;">
+      <svg width="15" height="12" viewBox="0 0 17 14" fill="none" stroke="#1c1410" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 1C8.5 1 11 1 11 3C11 4.2 10 5 8.5 5"/><path d="M8.5 5L1 12.5H16L8.5 5Z"/></svg>
+      <span style="font-size:14px;font-weight:700;color:#1c1410;">Clozet</span>
+    </a>
+    <a href="../index.html#newsletter" style="font-size:13px;font-weight:500;color:rgba(28,20,16,0.55);text-decoration:none;transition:color .18s;" onmouseover="this.style.color='#1c1410'" onmouseout="this.style.color='rgba(28,20,16,0.55)'">Subscribe</a>
+  </div>
+</header>
+
+<!-- ── Hero — split layout ── -->
+<div class="hero-outer">
+  <div class="hero-text-col">
+    <p class="hero-eyebrow">Slow Fashion</p>
+    <h1 class="hero-title">
+      Second-Hand Finds:<br>
+      <em>My Thrift Store<br>Routine</em>
+    </h1>
+    <p class="hero-sub">
+      Five Melbourne op-shops I keep going back to — and the system I've built so every visit actually counts.
+    </p>
+    <div class="hero-meta">
+      <span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        Alex Nguyen
+      </span>
+      <span class="dot"></span>
+      <span>Mar 24, 2026</span>
+      <span class="dot"></span>
+      <span>7 min read</span>
+    </div>
+  </div>
+  <div class="hero-img-col">
+    <img src="https://placehold.co/700x660/d8cfc4/8a7d6e?text=Thrift+Haul" alt="Thrift store editorial — second-hand fashion finds">
+  </div>
+</div>
+
+<!-- ── Main + Sidebar layout ── -->
+<div class="article-wrap">
+
+  <!-- ── Main content ── -->
+  <main class="article-main">
+
+    <!-- Byline -->
+    <div class="byline">
+      <img src="https://placehold.co/44x44/ede9fe/7c3aed?text=A" alt="Alex Nguyen" style="width:44px;height:44px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+      <div>
+        <div class="byline-name">Alex Nguyen</div>
+        <div class="byline-date">March 24, 2026 · 7 min read</div>
+      </div>
+    </div>
+
+    <!-- Tags -->
+    <div class="tag-strip">
+      <span class="tag">Slow Fashion</span>
+      <span class="tag">Thrifting</span>
+      <span class="tag">Melbourne</span>
+      <span class="tag">Second-Hand Style</span>
+    </div>
+
+    <!-- Intro -->
+    <p class="lead-para drop-cap">
+      Let me be honest with you from the start: thrift shopping is not inherently easy, relaxing, or quick.
+      Anyone who tells you otherwise has never spent two hours elbow-deep in a rack of XXXL windbreakers
+      looking for that one good thing they just know is in there somewhere.
+    </p>
+    <p class="body-para">
+      But here's what it can be, with the right approach and the right shops: genuinely one of the most
+      satisfying ways to build a wardrobe. Every piece has a story before it reaches you. Nothing is
+      mass-produced-for-you. And when you find something extraordinary for twelve dollars, there is a very
+      specific kind of joy that no full-price purchase has ever matched for me.
+    </p>
+    <p class="body-para">
+      I've been thrifting in Melbourne for years now, and I've watched the scene change dramatically — more
+      curation, better presentation, a few more price tags that make you momentarily forget you're in an op-shop.
+      But the good spots are still there. Here are five I genuinely, repeatedly return to.
+    </p>
+
+    <!-- Pull quote -->
+    <div class="pull-quote">
+      <blockquote>
+        Every piece has a story before it reaches you. And when you find something extraordinary for twelve dollars —
+        nothing compares to that feeling.
+      </blockquote>
+      <cite>— Alex Nguyen, Clozet</cite>
+    </div>
+
+    <div class="section-divider"></div>
+    <p id="shops-header" style="font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-40);margin-bottom:8px;">The Melbourne Five</p>
+    <h2 style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(24px,3vw,34px);font-weight:700;letter-spacing:-0.01em;margin-bottom:8px;" id="shops-section">Five shops. Zero filler.</h2>
+    <p class="body-para">These aren't ranked by quality — they're all worth your time. They're ordered roughly by how often I visit them, which reflects the specific things I'm always looking for.</p>
+
+    <!-- ── Shop 1: Mutual Muse ── -->
+    <div class="shop-card" id="shop-1">
+      <div class="shop-card-img">
+        <img src="https://placehold.co/800x340/d0c8bc/8a7d6e?text=Mutual+Muse+—+Northcote" alt="Mutual Muse, Northcote">
+        <div class="shop-card-img-overlay"></div>
+        <div class="shop-number-badge">Shop 01</div>
+      </div>
+      <div class="shop-card-body">
+        <div class="shop-card-header">
+          <div>
+            <div class="shop-name">Mutual Muse</div>
+            <div class="shop-location">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Northcote, Melbourne
+            </div>
+          </div>
+          <div class="shop-tags">
+            <span class="shop-tag teal">Curated</span>
+            <span class="shop-tag purple">Size Inclusive</span>
+            <span class="shop-tag">Consignment</span>
+          </div>
+        </div>
+        <p class="shop-card-desc">
+          Mutual Muse is where I go when I want to thrift but don't want to dig. Everything here is consignment — which means it's been pre-selected, checked, and curated before it ever hits the rail. The racks are thoughtfully arranged, the lighting is good, and there's always a genuine cross-section of designer and high street sitting side by side.
+        </p>
+        <p class="shop-card-desc">
+          What I particularly love is the size range. This isn't a shop where all the "good stuff" is a size 8. The curation extends across sizes, which makes the whole experience feel welcoming in a way that not every preloved shop manages.
+        </p>
+        <div class="shop-card-footer">
+          <div class="shop-detail"><span class="shop-detail-label">Best for</span><span class="shop-detail-val">Curated day-to-day pieces</span></div>
+          <div class="shop-detail"><span class="shop-detail-label">Price range</span><span class="shop-detail-val">$$ — $$$ (varies by piece)</span></div>
+          <div class="shop-detail"><span class="shop-detail-label">Tip</span><span class="shop-detail-val">Go on weekday mornings</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip-callout">
+      <div class="tip-icon">💡</div>
+      <p class="tip-text"><strong>Alex's tip:</strong> Mutual Muse updates stock regularly — follow them on Instagram to catch new drops before the weekend crowd gets there. Their Northcote neighbourhood is worth a full morning: grab a coffee at a nearby café, then shop slowly.</p>
+    </div>
+
+    <!-- ── Shop 2: Shag ── -->
+    <div class="shop-card" id="shop-2">
+      <div class="shop-card-img" style="background:#e8ddd0;">
+        <img src="https://placehold.co/800x340/c8bfb0/7d7060?text=Shag+—+Windsor" alt="Shag vintage, Windsor">
+        <div class="shop-card-img-overlay"></div>
+        <div class="shop-number-badge">Shop 02</div>
+      </div>
+      <div class="shop-card-body">
+        <div class="shop-card-header">
+          <div>
+            <div class="shop-name">Shag</div>
+            <div class="shop-location">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Windsor (Chapel Street), Melbourne
+            </div>
+          </div>
+          <div class="shop-tags">
+            <span class="shop-tag amber">Reworked</span>
+            <span class="shop-tag">1920s–2000s</span>
+            <span class="shop-tag purple">Statement pieces</span>
+          </div>
+        </div>
+        <p class="shop-card-desc">
+          Shag has been on Chapel Street since 1996, which should tell you something about how it's managed to outlast every passing trend cycle. The vibe is Studio 54 filtered through someone's grandmother's wardrobe — sequins, fringing, dramatic sleeves, embellished pieces that refuse to whisper. The owner reworks vintage finds from her personal archive, adding embellishments and alterations to make them feel current rather than costume.
+        </p>
+        <p class="shop-card-desc">
+          This is where I come when I want something genuinely eye-catching. It's not everyday dressing — it's the piece you buy for a party and end up wearing to a Tuesday dinner because you feel too good in it to leave it hanging.
+        </p>
+        <div class="shop-card-footer">
+          <div class="shop-detail"><span class="shop-detail-label">Best for</span><span class="shop-detail-val">Statement & reworked vintage</span></div>
+          <div class="shop-detail"><span class="shop-detail-label">Price range</span><span class="shop-detail-val">$$–$$$ (mid-premium)</span></div>
+          <div class="shop-detail"><span class="shop-detail-label">Era</span><span class="shop-detail-val">1920s through 2000s</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="photo-full">
+      <img src="https://placehold.co/900x400/d4ccbc/8a806e?text=Vintage+Rail+Styling" alt="Vintage clothing rail editorial">
+      <p class="photo-caption">The best thrift shops aren't a gamble — they're a practice. The more often you go, the better your eye gets.</p>
+    </div>
+
+    <!-- ── Shop 3: Retropolis ── -->
+    <div class="shop-card" id="shop-3">
+      <div class="shop-card-img" style="background:#ddd4c4;">
+        <img src="https://placehold.co/800x340/d4cbba/9a8e7e?text=Retropolis+—+Preston" alt="Retropolis, Preston">
+        <div class="shop-card-img-overlay"></div>
+        <div class="shop-number-badge">Shop 03</div>
+      </div>
+      <div class="shop-card-body">
+        <div class="shop-card-header">
+          <div>
+            <div class="shop-name">Retropolis</div>
+            <div class="shop-location">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Preston, Melbourne
+            </div>
+          </div>
+          <div class="shop-tags">
+            <span class="shop-tag teal">Market format</span>
+            <span class="shop-tag">65+ vendors</span>
+            <span class="shop-tag amber">Discovery</span>
+          </div>
+        </div>
+        <p class="shop-card-desc">
+          Retropolis is an experience, not just a shop. Sixty-five-plus independent vintage curators under one roof, anchored by a genuinely iconic turquoise Ford Falcon that serves as the cash register. It's the kind of place where you go in for one hour and surface three hours later, slightly dazed and carrying a bag you didn't plan on buying.
+        </p>
+        <p class="shop-card-desc">
+          The breadth here is unmatched — you'll find mid-century homewares sitting next to Y2K tracksuits sitting next to 1970s linen blazers. If you know what you're looking for, call ahead: Retropolis lets you put in a request and vendors will dig for you. If you don't know what you're looking for, better.
+        </p>
+        <div class="shop-card-footer">
+          <div class="shop-detail"><span class="shop-detail-label">Best for</span><span class="shop-detail-val">Discovery & rare finds</span></div>
+          <div class="shop-detail"><span class="shop-detail-label">Price range</span><span class="shop-detail-val">$ — $$$ (depends on vendor)</span></div>
+          <div class="shop-detail"><span class="shop-detail-label">Tip</span><span class="shop-detail-val">Call ahead for stock requests</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip-callout">
+      <div class="tip-icon">💡</div>
+      <p class="tip-text"><strong>Alex's tip:</strong> Wear comfortable shoes and bring cash — some vendors don't take card. Block out at least two hours. And follow <strong>@retropolis_melbourne</strong> on Instagram for stock previews before you make the trip north.</p>
+    </div>
+
+    <!-- ── Shop 4: Hunter Gatherer ── -->
+    <div class="shop-card" id="shop-4">
+      <div class="shop-card-img" style="background:#cdc5b8;">
+        <img src="https://placehold.co/800x340/c8bfb2/8a8070?text=Hunter+Gatherer+—+Royal+Arcade" alt="Hunter Gatherer, Royal Arcade">
+        <div class="shop-card-img-overlay"></div>
+        <div class="shop-number-badge">Shop 04</div>
+      </div>
+      <div class="shop-card-body">
+        <div class="shop-card-header">
+          <div>
+            <div class="shop-name">Hunter Gatherer</div>
+            <div class="shop-location">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Royal Arcade, CBD Melbourne
+            </div>
+          </div>
+          <div class="shop-tags">
+            <span class="shop-tag teal">Affordable</span>
+            <span class="shop-tag">Prints & colour</span>
+            <span class="shop-tag purple">CBD location</span>
+          </div>
+        </div>
+        <p class="shop-card-desc">
+          Tucked inside Melbourne's beautiful Royal Arcade, Hunter Gatherer has been cherry-picking the best pieces from Brotherhood of St Laurence op-shops across Victoria since the 1980s. The result is a tight, well-edited selection with a particular gift for colourful prints and unusual cuts — the kind of pieces that most shoppers walk past, but a good stylist would stop dead for.
+        </p>
+        <p class="shop-card-desc">
+          The prices are genuinely reasonable for what you're getting, and the staff have an excellent eye. If you're ever in the CBD and have twenty spare minutes — which you never do, but you should manufacture — this is where I'd send you.
+        </p>
+        <div class="shop-card-footer">
+          <div class="shop-detail"><span class="shop-detail-label">Best for</span><span class="shop-detail-val">Prints, colour, unique cuts</span></div>
+          <div class="shop-detail"><span class="shop-detail-label">Price range</span><span class="shop-detail-val">$ — $$ (very accessible)</span></div>
+          <div class="shop-detail"><span class="shop-detail-label">Location</span><span class="shop-detail-val">Royal Arcade, City</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Shop 5: American Vintage ── -->
+    <div class="shop-card" id="shop-5">
+      <div class="shop-card-img" style="background:#d8d0c4;">
+        <img src="https://placehold.co/800x340/d0c8bb/9a9080?text=American+Vintage+—+Fitzroy" alt="American Vintage, Fitzroy">
+        <div class="shop-card-img-overlay"></div>
+        <div class="shop-number-badge">Shop 05</div>
+      </div>
+      <div class="shop-card-body">
+        <div class="shop-card-header">
+          <div>
+            <div class="shop-name">American Vintage</div>
+            <div class="shop-location">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Fitzroy, Melbourne
+            </div>
+          </div>
+          <div class="shop-tags">
+            <span class="shop-tag amber">US sourced</span>
+            <span class="shop-tag">Denim</span>
+            <span class="shop-tag">Americana</span>
+          </div>
+        </div>
+        <p class="shop-card-desc">
+          Don't let the name mislead you — this is a Melbourne institution with serious credentials. Over 7,000 pieces sourced directly from the United States, with bi-annual drops that create genuine anticipation. The specialty here is authentic Americana: cowboy boots with real history, varsity jackets, and the kind of vintage denim that doesn't exist on the high street at any price point.
+        </p>
+        <p class="shop-card-desc">
+          Fitzroy suits this shop perfectly. The neighbourhood has always had a healthy appetite for the particular kind of effortless-but-deliberate dressing that a well-chosen piece of American vintage enables. If you're building a wardrobe with character, this is your place.
+        </p>
+        <div class="shop-card-footer">
+          <div class="shop-detail"><span class="shop-detail-label">Best for</span><span class="shop-detail-val">Denim, boots, Americana</span></div>
+          <div class="shop-detail"><span class="shop-detail-label">Price range</span><span class="shop-detail-val">$ — $$ (accessible)</span></div>
+          <div class="shop-detail"><span class="shop-detail-label">Stock drops</span><span class="shop-detail-val">Bi-annual US imports</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- My routine -->
+    <h2 id="routine-section" style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(22px,3vw,32px);font-weight:700;letter-spacing:-0.01em;margin-bottom:18px;">The Routine That Makes It Work</h2>
+    <p class="body-para">
+      Thrifting without a system is how you end up with a bag full of things you'll never wear and a wardrobe that's somehow fuller but still feels empty. Over the years I've landed on a few simple rules that have completely changed the quality of what I bring home.
+    </p>
+
+    <!-- Checklist -->
+    <div style="background:rgba(255,255,255,0.70);border:1px solid var(--ink-10);border-radius:18px;padding:28px 28px 20px;margin:32px 0;">
+      <p style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-40);margin-bottom:18px;">My Pre-Shop Checklist</p>
+      <ul class="checklist">
+        <li>
+          <div class="check-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span>Write down three things you actually need — and leave the list in your pocket as a reality check, not a rulebook.</span>
+        </li>
+        <li>
+          <div class="check-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span>Set a budget before you walk in. Not a soft one — a real one. It keeps you honest about the difference between a great find and an expensive impulse.</span>
+        </li>
+        <li>
+          <div class="check-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span>Wear something easy to take off. You're going to want to try things on, and dressing rooms in op-shops are not always... abundant.</span>
+        </li>
+        <li>
+          <div class="check-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span>Check the fabric before you check the label. A beautiful weave in good condition matters more than a brand name that means nothing to you.</span>
+        </li>
+        <li>
+          <div class="check-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span>Ask yourself: "Would I buy this at full price?" If yes — and the condition is there — it's a yes. If no, it's a no regardless of how cheap it is.</span>
+        </li>
+        <li>
+          <div class="check-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span>Go back regularly. Stock turns over fast, and the shops that didn't yield anything last month might be the ones with everything this month.</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Closing -->
+    <p class="body-para" style="margin-top:32px;">
+      The truth about thrifting is that it rewards patience and penalises urgency. The people who get the best
+      finds are rarely the ones who go once, feel disappointed, and write it off. They're the ones who go back,
+      build relationships with good shops, and trust that the wardrobe worth having is built slowly.
+    </p>
+    <p class="body-para">
+      Melbourne has more good preloved shopping than almost any city I've visited — and these five shops are just
+      the beginning. I'll keep adding to this list as I find new places worth returning to.
+    </p>
+    <p class="body-para" style="font-style:italic;color:var(--ink-40);">
+      If you have a Melbourne thrift shop you think belongs on this list, reply to the newsletter and tell me about it. I genuinely read every one.
+    </p>
+
+    <!-- Newsletter -->
+    <div class="nl-banner">
+      <p style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;">Newsletter</p>
+      <h3 style="font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;margin-bottom:8px;">Get the next guide first.</h3>
+      <p style="font-size:14px;color:var(--ink-60);margin-bottom:24px;line-height:1.65;">New thrift city guides, wardrobe edits, and slow fashion stories — every Tuesday.</p>
+      <form onsubmit="return false;" style="display:flex;gap:10px;max-width:380px;margin:0 auto;">
+        <input type="email" class="nl-input" placeholder="your@email.com" aria-label="Email address">
+        <button type="submit" class="btn-teal">Subscribe</button>
+      </form>
+    </div>
+
+    <!-- More articles -->
+    <div style="margin-top:72px;">
+      <p style="font-size:11px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:var(--ink-40);margin-bottom:22px;">You Might Also Like</p>
+      <div class="more-grid">
+        <a href="10-pieces.html" class="more-card">
+          <img src="https://placehold.co/400x150/ede9fe/7c3aed?text=✦" alt="10 pieces article">
+          <div class="more-card-body">
+            <div class="more-card-tag">Style Diaries</div>
+            <div class="more-card-title">The 10 Pieces I Actually Wear Every Single Week</div>
+          </div>
+        </a>
+        <a href="#" class="more-card">
+          <img src="https://placehold.co/400x150/fef3c7/b45309?text=✦" alt="Outfit review article">
+          <div class="more-card-body">
+            <div class="more-card-tag">Outfit Reviews</div>
+            <div class="more-card-title">Reviewing Every Outfit from My Last 30 Days</div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ── Sidebar ── -->
+  <aside class="article-sidebar">
+    <!-- TOC -->
+    <div class="sidebar-block">
+      <p class="sidebar-label">In this article</p>
+      <nav>
+        <a href="#shops-section" class="toc-link" id="toc-shops">The Melbourne Five</a>
+        <a href="#shop-1" class="toc-link" id="toc-1">01 — Mutual Muse</a>
+        <a href="#shop-2" class="toc-link" id="toc-2">02 — Shag</a>
+        <a href="#shop-3" class="toc-link" id="toc-3">03 — Retropolis</a>
+        <a href="#shop-4" class="toc-link" id="toc-4">04 — Hunter Gatherer</a>
+        <a href="#shop-5" class="toc-link" id="toc-5">05 — American Vintage</a>
+        <a href="#routine-section" class="toc-link" id="toc-routine">My Routine</a>
+      </nav>
+    </div>
+
+    <!-- Quick stats -->
+    <div class="sidebar-block">
+      <p class="sidebar-label">Quick Stats</p>
+      <div class="sidebar-stat">
+        <div class="stat-row">
+          <span class="stat-label">Shops covered</span>
+          <span class="stat-val">5</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">City</span>
+          <span class="stat-val">Melbourne, AU</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Category</span>
+          <span class="stat-val">Slow Fashion</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Read time</span>
+          <span class="stat-val">7 min</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mini callout -->
+    <div class="sidebar-block" style="background:rgba(13,148,136,0.06);border-color:rgba(13,148,136,0.18);">
+      <p style="font-size:12px;font-weight:700;color:var(--accent);margin-bottom:6px;">Save for later</p>
+      <p style="font-size:12px;color:var(--ink-60);line-height:1.60;">Bookmark this page before your next Melbourne trip. These five shops make a great one-day route.</p>
+    </div>
+  </aside>
+
+</div><!-- end article-wrap -->
+
+<!-- Footer -->
+<footer>
+  <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <svg width="14" height="11" viewBox="0 0 17 14" fill="none" stroke="rgba(28,20,16,0.45)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 1C8.5 1 11 1 11 3C11 4.2 10 5 8.5 5"/><path d="M8.5 5L1 12.5H16L8.5 5Z"/></svg>
+      <span style="font-size:13px;font-weight:700;color:rgba(28,20,16,0.45);">Clozet</span>
+    </div>
+    <div style="font-size:12px;color:rgba(28,20,16,0.30);">© 2026 Clozet. All rights reserved.</div>
+    <a href="../index.html" style="font-size:13px;color:rgba(28,20,16,0.50);text-decoration:none;font-weight:500;" onmouseover="this.style.color='#1c1410'" onmouseout="this.style.color='rgba(28,20,16,0.50)'">← Back to home</a>
+  </div>
+</footer>
+
+<script>
+  // Reading progress bar
+  window.addEventListener('scroll', () => {
+    const doc = document.documentElement;
+    const scrolled = doc.scrollTop / (doc.scrollHeight - doc.clientHeight);
+    document.getElementById('progress-bar').style.width = (scrolled * 100) + '%';
+  });
+
+  // Active TOC link on scroll
+  const sections = [
+    ['shops-section', 'toc-shops'],
+    ['shop-1', 'toc-1'], ['shop-2', 'toc-2'], ['shop-3', 'toc-3'],
+    ['shop-4', 'toc-4'], ['shop-5', 'toc-5'],
+    ['routine-section', 'toc-routine'],
+  ];
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      const pair = sections.find(s => s[0] === e.target.id);
+      if (pair) {
+        const link = document.getElementById(pair[1]);
+        if (link) link.classList.toggle('active', e.isIntersecting);
+      }
+    });
+  }, { rootMargin: '-20% 0px -65% 0px' });
+  sections.forEach(([sectionId]) => {
+    const el = document.getElementById(sectionId);
+    if (el) observer.observe(el);
+  });
+</script>
+
+</body>
+</html>
