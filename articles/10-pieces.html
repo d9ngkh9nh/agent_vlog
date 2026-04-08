@@ -311,10 +311,33 @@
       padding: 32px 24px 36px;
     }
 
+    @media (max-width: 767px) {
+      .article-body { padding: 44px 20px 72px; }
+      .photo-full   { margin: 32px -20px; }
+    }
+
     @media (max-width: 640px) {
-      .photo-pair  { grid-template-columns: 1fr; }
-      .photo-side  { grid-template-columns: 1fr; }
+      .photo-pair   { grid-template-columns: 1fr; }
+      .photo-side   { grid-template-columns: 1fr; }
       .shop-section { padding: 28px 20px; }
+      .shop-grid    { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+      .lead-para    { font-size: 17px; }
+      .drop-cap::first-letter { font-size: 3.6em; }
+      .item-section { margin: 40px 0; }
+      .more-grid    { grid-template-columns: 1fr; }
+      .pull-quote   { margin: 36px 0; }
+      .section-divider { margin: 36px 0; }
+
+      /* Hero: reduce height on short phones */
+      .hero-wrap { height: min(65vh, 500px); }
+      /* Hero content: tighter left padding on mobile */
+      .hero-content { padding: 24px 20px 36px; }
+
+      /* Byline: slightly less top padding */
+      .byline { padding: 20px 0; margin-bottom: 36px; }
+
+      /* Photo-side: image stacks above text on mobile */
+      .photo-side > img { order: -1; }
     }
 
     ::-webkit-scrollbar { width: 5px; }

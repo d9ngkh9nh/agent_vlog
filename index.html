@@ -157,15 +157,97 @@
     .social-btn:hover        { color: #1c1410; border-color: rgba(28,20,16,0.36); background: rgba(28,20,16,0.05); }
     .social-btn:focus-visible { outline: 2px solid rgba(28,20,16,0.4); outline-offset: 2px; }
 
+    /* ── Hamburger button ── */
+    .hamburger {
+      display: none;
+      background: rgba(255,255,255,0.65);
+      border: 1px solid rgba(28,20,16,0.12);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      border-radius: 9px; cursor: pointer;
+      width: 38px; height: 38px;
+      flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+      flex-shrink: 0;
+    }
+    .hamburger span {
+      display: block; width: 18px; height: 1.5px;
+      background: #1c1410; border-radius: 2px;
+      transition: transform 0.22s, opacity 0.22s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    /* ── Mobile nav overlay ── */
+    .mobile-nav {
+      display: none;
+      position: fixed; top: 64px; left: 0; right: 0; bottom: 0;
+      background: rgba(250,248,244,0.97);
+      backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      z-index: 49;
+      padding: 36px 28px 48px;
+      flex-direction: column;
+      overflow-y: auto;
+      border-top: 1px solid rgba(28,20,16,0.08);
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav-link {
+      display: block; font-size: 28px; font-weight: 800;
+      letter-spacing: -0.025em; color: #1c1410;
+      text-decoration: none; padding: 18px 0;
+      border-bottom: 1px solid rgba(28,20,16,0.07);
+      transition: opacity 0.15s;
+    }
+    .mobile-nav-link:active { opacity: 0.4; }
+    .mobile-nav-sub {
+      margin-top: auto; padding-top: 28px;
+      font-size: 13px; color: rgba(28,20,16,0.45);
+    }
+
     /* ── Responsive overrides ── */
     @media (max-width: 1023px) {
-      .hero-right { display: none !important; }
-      .hero-grid  { grid-template-columns: 1fr !important; }
+      .hero-right  { display: none !important; }
+      .hero-grid   { grid-template-columns: 1fr !important; }
+      .desktop-nav { display: none !important; }
+      .hamburger   { display: flex !important; }
     }
+
     @media (max-width: 767px) {
-      .about-grid { grid-template-columns: 1fr !important; }
-      .nl-form    { flex-direction: column !important; }
-      .nl-section { padding: 48px 24px !important; }
+      .about-grid  { grid-template-columns: 1fr !important; gap: 40px !important; }
+      .nl-form     { flex-direction: column !important; }
+
+      /* Section vertical + horizontal padding */
+      #posts, #topics, #about, #newsletter {
+        padding-top:    52px !important;
+        padding-bottom: 52px !important;
+        padding-left:   20px !important;
+        padding-right:  20px !important;
+      }
+
+      /* Hero inner grid */
+      #hero-inner { padding: 48px 20px 56px !important; }
+
+      /* Newsletter card inner */
+      #nl-inner { padding: 36px 20px !important; }
+
+      /* Footer row → column */
+      #footer-inner {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 16px !important;
+      }
+
+      /* Dividers respect new side padding */
+      .divider { margin-left: 20px; margin-right: 20px; }
+
+      /* About floating badge: prevent negative overflow on narrow screens */
+      .about-badge { right: 0 !important; bottom: -10px !important; }
+    }
+
+    @media (max-width: 480px) {
+      /* Newsletter form button full-width on very small phones */
+      .nl-form .btn-white { width: 100% !important; }
+      /* Stats strip tighter gap */
+      #hero-stats { gap: 18px !important; }
     }
 
     /* Scrollbar */
@@ -193,23 +275,63 @@
     </a>
 
     <!-- Desktop nav links -->
-    <nav class="hidden md:flex" style="display:flex;align-items:center;gap:30px;" aria-label="Main navigation">
+    <nav class="desktop-nav" style="display:flex;align-items:center;gap:30px;" aria-label="Main navigation">
       <a href="#posts"      class="nav-link">Articles</a>
       <a href="#topics"     class="nav-link">Topics</a>
       <a href="#about"      class="nav-link">About</a>
       <a href="#newsletter" class="nav-link">Newsletter</a>
     </nav>
 
-    <!-- Subscribe -->
-    <button class="btn-white" style="padding:9px 20px;font-size:13px;" onclick="document.getElementById('newsletter').scrollIntoView({behavior:'smooth'})">
-      Subscribe
-    </button>
+    <!-- Desktop: Subscribe | Mobile: Hamburger -->
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button class="btn-white desktop-nav" style="padding:9px 20px;font-size:13px;" onclick="document.getElementById('newsletter').scrollIntoView({behavior:'smooth'})">
+        Subscribe
+      </button>
+      <button class="hamburger" id="hamburger-btn" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </div>
 </header>
 
+<!-- Mobile nav overlay -->
+<div class="mobile-nav" id="mobile-nav" role="dialog" aria-label="Mobile navigation">
+  <a href="#posts"      class="mobile-nav-link" onclick="closeMobileNav()">Articles</a>
+  <a href="#topics"     class="mobile-nav-link" onclick="closeMobileNav()">Topics</a>
+  <a href="#about"      class="mobile-nav-link" onclick="closeMobileNav()">About</a>
+  <a href="#newsletter" class="mobile-nav-link" onclick="closeMobileNav()">Newsletter</a>
+  <div class="mobile-nav-sub">
+    <button class="btn-white" style="width:100%;justify-content:center;padding:14px;" onclick="closeMobileNav();document.getElementById('newsletter').scrollIntoView({behavior:'smooth'})">
+      Subscribe to newsletter
+    </button>
+  </div>
+</div>
+
+<script>
+  const hamburgerBtn = document.getElementById('hamburger-btn');
+  const mobileNav    = document.getElementById('mobile-nav');
+
+  function closeMobileNav() {
+    hamburgerBtn.classList.remove('open');
+    mobileNav.classList.remove('open');
+    hamburgerBtn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  hamburgerBtn.addEventListener('click', () => {
+    const isOpen = mobileNav.classList.toggle('open');
+    hamburgerBtn.classList.toggle('open', isOpen);
+    hamburgerBtn.setAttribute('aria-expanded', String(isOpen));
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  });
+
+  // Close on escape key
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMobileNav(); });
+</script>
+
 <!-- ══════════════════════════════════ HERO ══════════════════════════════════ -->
 <section class="mesh" style="min-height:calc(100vh - 64px);display:flex;align-items:center;overflow:hidden;position:relative;">
-  <div style="position:relative;z-index:2;max-width:1200px;margin:0 auto;padding:80px 24px;width:100%;display:grid;grid-template-columns:1fr 460px;gap:60px;align-items:center;" class="hero-grid">
+  <div id="hero-inner" style="position:relative;z-index:2;max-width:1200px;margin:0 auto;padding:80px 24px;width:100%;display:grid;grid-template-columns:1fr 460px;gap:60px;align-items:center;" class="hero-grid">
 
     <!-- Left: copy -->
     <div>
@@ -237,7 +359,7 @@
       </div>
 
       <!-- Stats strip -->
-      <div style="display:flex;align-items:center;gap:28px;margin-top:52px;padding-top:28px;border-top:1px solid rgba(28,20,16,0.09);flex-wrap:wrap;">
+      <div id="hero-stats" style="display:flex;align-items:center;gap:28px;margin-top:52px;padding-top:28px;border-top:1px solid rgba(28,20,16,0.09);flex-wrap:wrap;">
         <div>
           <div style="font-size:22px;font-weight:800;letter-spacing:-0.03em;">48+</div>
           <div style="font-size:11px;color:rgba(28,20,16,0.42);margin-top:2px;font-weight:500;">Articles</div>
@@ -422,7 +544,7 @@
         <img src="https://placehold.co/560x460/ede9fe/7c3aed?text=✦" alt="Author photo" style="width:100%;height:420px;object-fit:cover;display:block;">
       </div>
       <!-- Floating stat badge -->
-      <div class="glass float-a" style="position:absolute;bottom:-18px;right:-14px;border-radius:16px;padding:14px 20px;">
+      <div class="glass float-a about-badge" style="position:absolute;bottom:-18px;right:-14px;border-radius:16px;padding:14px 20px;">
         <div style="font-size:11px;color:rgba(28,20,16,0.46);margin-bottom:3px;font-weight:500;">Writing since</div>
         <div style="font-size:22px;font-weight:800;letter-spacing:-0.03em;color:#1c1410;">2019 ✦</div>
       </div>
@@ -450,7 +572,7 @@
 <section id="newsletter" style="padding:96px 24px;max-width:1200px;margin:0 auto;">
   <div class="mesh glass" style="border-radius:28px;position:relative;overflow:hidden;">
     <div style="position:relative;z-index:2;text-align:center;">
-      <div style="padding:72px 48px;">
+      <div id="nl-inner" style="padding:72px 48px;">
         <div style="font-size:11px;font-weight:700;color:#7c3aed;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;">Newsletter</div>
         <h2 style="font-size:clamp(26px,4vw,44px);font-weight:800;letter-spacing:-0.03em;line-height:1.1;margin-bottom:14px;">Style notes, once a week.</h2>
         <p style="font-size:15px;color:rgba(28,20,16,0.50);max-width:400px;margin:0 auto 38px;line-height:1.72;">Short, thoughtful letters on style and life. No spam — just good reading delivered every Tuesday.</p>
@@ -466,7 +588,7 @@
 
 <!-- ════════════════════════════════════ FOOTER ══════════════════════════════════ -->
 <footer style="border-top:1px solid rgba(28,20,16,0.08);padding:36px 24px 40px;">
-  <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;">
+  <div id="footer-inner" style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;">
 
     <!-- Logo + copyright -->
     <div>
