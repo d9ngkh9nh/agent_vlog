@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node serve.mjs)",
+      "Read(//usr/local/bin/**)",
+      "Read(//Users/khanhdang/.nvm/versions/**)"
+    ]
+  }
+}

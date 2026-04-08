@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clozet — A Personal Style Blog</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #faf8f4;
+      color: #1c1410;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Mesh Gradient (pastel) ── */
+    .mesh {
+      position: relative;
+    }
+    .mesh::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 90% 70% at 10% 15%, rgba(167,139,250,0.42) 0%, transparent 55%),
+        radial-gradient(ellipse 65% 55% at 88% 8%,  rgba(251,113,133,0.32) 0%, transparent 52%),
+        radial-gradient(ellipse 75% 65% at 70% 88%, rgba(251,191,36,0.30)  0%, transparent 58%),
+        radial-gradient(ellipse 55% 50% at 3%  82%, rgba(94,234,212,0.28)  0%, transparent 48%);
+      pointer-events: none;
+      z-index: 0;
+      animation: meshDrift 18s ease-in-out infinite;
+    }
+    @keyframes meshDrift {
+      0%,100% { transform: scale(1) translate(0,0); }
+      50%      { transform: scale(1.04) translate(1.2%, -0.6%); }
+    }
+
+    /* ── Glass ── */
+    .glass {
+      background: rgba(255,255,255,0.65);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(28,20,16,0.08);
+    }
+    .glass-nav {
+      background: rgba(250,248,244,0.86);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid rgba(28,20,16,0.08);
+    }
+
+    /* ── Buttons ── */
+    .btn-white {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: #1c1410; color: #faf8f4;
+      border-radius: 9999px; padding: 11px 26px;
+      font-weight: 600; font-size: 14px; border: none; cursor: pointer;
+      transition: background 0.18s, transform 0.12s;
+    }
+    .btn-white:hover       { background: #2e2218; }
+    .btn-white:active      { transform: scale(0.97); }
+    .btn-white:focus-visible { outline: 2px solid #1c1410; outline-offset: 3px; }
+
+    .btn-ghost {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: transparent; color: #1c1410;
+      border-radius: 9999px; padding: 10px 26px;
+      font-weight: 500; font-size: 14px;
+      border: 1px solid rgba(28,20,16,0.22); cursor: pointer;
+      transition: background 0.18s, border-color 0.18s, transform 0.12s;
+    }
+    .btn-ghost:hover       { background: rgba(28,20,16,0.05); border-color: rgba(28,20,16,0.42); }
+    .btn-ghost:active      { transform: scale(0.97); }
+    .btn-ghost:focus-visible { outline: 2px solid rgba(28,20,16,0.4); outline-offset: 3px; }
+
+    /* ── Nav links ── */
+    .nav-link {
+      color: rgba(28,20,16,0.52); font-size: 14px; font-weight: 400;
+      text-decoration: none; transition: color 0.18s;
+    }
+    .nav-link:hover        { color: #1c1410; }
+    .nav-link:focus-visible { color: #1c1410; outline: 2px solid rgba(28,20,16,0.4); outline-offset: 4px; border-radius: 3px; }
+
+    /* ── Float animations ── */
+    @keyframes floatA {
+      0%,100% { transform: translateY(0px); }
+      50%      { transform: translateY(-14px); }
+    }
+    @keyframes floatB {
+      0%,100% { transform: translateY(-5px); }
+      50%      { transform: translateY(9px); }
+    }
+    .float-a { animation: floatA 7s ease-in-out infinite; }
+    .float-b { animation: floatB 6s ease-in-out 1.2s infinite; }
+    .float-c { animation: floatA 8.5s ease-in-out 2.8s infinite; }
+
+    /* ── Post cards ── */
+    .post-card {
+      border-radius: 20px; overflow: hidden;
+      border: 1px solid rgba(28,20,16,0.08);
+      cursor: pointer;
+      transition: transform 0.26s, border-color 0.26s, box-shadow 0.26s;
+    }
+    .post-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(28,20,16,0.16);
+      box-shadow: 0 20px 56px rgba(28,20,16,0.10);
+    }
+    .post-card .thumb { transition: transform 0.4s; display: block; width: 100%; height: 100%; object-fit: cover; }
+    .post-card:hover .thumb { transform: scale(1.04); }
+    .post-card:focus-visible { outline: 2px solid rgba(28,20,16,0.4); outline-offset: 2px; }
+
+    /* ── Topic cards ── */
+    .topic-card {
+      border-radius: 18px; overflow: hidden;
+      border: 1px solid rgba(28,20,16,0.08);
+      cursor: pointer;
+      transition: transform 0.22s, border-color 0.22s, background 0.22s;
+    }
+    .topic-card:hover   { transform: translateY(-3px); border-color: rgba(28,20,16,0.16); background: rgba(255,255,255,0.8); }
+    .topic-card:active  { transform: translateY(0); }
+    .topic-card:focus-visible { outline: 2px solid rgba(28,20,16,0.4); outline-offset: 2px; }
+
+    /* ── Newsletter input ── */
+    .nl-input {
+      flex: 1; background: rgba(28,20,16,0.05);
+      border: 1px solid rgba(28,20,16,0.14);
+      border-radius: 9999px; padding: 12px 22px;
+      color: #1c1410; font-family: inherit; font-size: 14px;
+      outline: none; min-width: 0;
+      transition: border-color 0.18s, background 0.18s;
+    }
+    .nl-input::placeholder { color: rgba(28,20,16,0.36); }
+    .nl-input:focus { border-color: rgba(28,20,16,0.32); background: rgba(255,255,255,0.7); }
+
+    /* ── Divider ── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, rgba(28,20,16,0.10) 30%, rgba(28,20,16,0.10) 70%, transparent 100%);
+    }
+
+    /* ── Social icon buttons ── */
+    .social-btn {
+      width: 36px; height: 36px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid rgba(28,20,16,0.14);
+      color: rgba(28,20,16,0.45);
+      transition: color 0.18s, border-color 0.18s, background 0.18s;
+      text-decoration: none;
+    }
+    .social-btn:hover        { color: #1c1410; border-color: rgba(28,20,16,0.36); background: rgba(28,20,16,0.05); }
+    .social-btn:focus-visible { outline: 2px solid rgba(28,20,16,0.4); outline-offset: 2px; }
+
+    /* ── Responsive overrides ── */
+    @media (max-width: 1023px) {
+      .hero-right { display: none !important; }
+      .hero-grid  { grid-template-columns: 1fr !important; }
+    }
+    @media (max-width: 767px) {
+      .about-grid { grid-template-columns: 1fr !important; }
+      .nl-form    { flex-direction: column !important; }
+      .nl-section { padding: 48px 24px !important; }
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: #faf8f4; }
+    ::-webkit-scrollbar-thumb { background: rgba(28,20,16,0.15); border-radius: 5px; }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════ NAV ══════════════════════════════════ -->
+<header class="glass-nav" style="position:sticky;top:0;z-index:50;">
+  <div style="max-width:1200px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;">
+
+    <!-- Logo -->
+    <a href="#" style="text-decoration:none;display:flex;align-items:center;" aria-label="Clozet home">
+      <div class="glass" style="border-radius:10px;padding:7px 14px;display:flex;align-items:center;gap:9px;">
+        <!-- Hanger icon -->
+        <svg width="17" height="14" viewBox="0 0 17 14" fill="none" stroke="#1c1410" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M8.5 1C8.5 1 11 1 11 3C11 4.2 10 5 8.5 5"/>
+          <path d="M8.5 5L1 12.5H16L8.5 5Z"/>
+        </svg>
+        <span style="font-size:15px;font-weight:700;letter-spacing:-0.015em;color:#1c1410;">Clozet</span>
+      </div>
+    </a>
+
+    <!-- Desktop nav links -->
+    <nav class="hidden md:flex" style="display:flex;align-items:center;gap:30px;" aria-label="Main navigation">
+      <a href="#posts"      class="nav-link">Articles</a>
+      <a href="#topics"     class="nav-link">Topics</a>
+      <a href="#about"      class="nav-link">About</a>
+      <a href="#newsletter" class="nav-link">Newsletter</a>
+    </nav>
+
+    <!-- Subscribe -->
+    <button class="btn-white" style="padding:9px 20px;font-size:13px;" onclick="document.getElementById('newsletter').scrollIntoView({behavior:'smooth'})">
+      Subscribe
+    </button>
+  </div>
+</header>
+
+<!-- ══════════════════════════════════ HERO ══════════════════════════════════ -->
+<section class="mesh" style="min-height:calc(100vh - 64px);display:flex;align-items:center;overflow:hidden;position:relative;">
+  <div style="position:relative;z-index:2;max-width:1200px;margin:0 auto;padding:80px 24px;width:100%;display:grid;grid-template-columns:1fr 460px;gap:60px;align-items:center;" class="hero-grid">
+
+    <!-- Left: copy -->
+    <div>
+      <!-- Eyebrow tag -->
+      <div class="glass" style="display:inline-flex;align-items:center;gap:8px;border-radius:9999px;padding:5px 15px;margin-bottom:30px;">
+        <span style="width:6px;height:6px;border-radius:50%;background:#7c3aed;flex-shrink:0;"></span>
+        <span style="font-size:11px;font-weight:600;color:rgba(28,20,16,0.62);letter-spacing:.07em;text-transform:uppercase;">Personal Style Blog</span>
+      </div>
+
+      <!-- Headline -->
+      <h1 style="font-size:clamp(40px,5.5vw,72px);font-weight:800;line-height:1.04;letter-spacing:-0.035em;margin-bottom:22px;">
+        Curated Style,<br>
+        <span style="color:rgba(28,20,16,0.22);">Honest Stories.</span>
+      </h1>
+
+      <!-- Subheadline -->
+      <p style="font-size:17px;color:rgba(28,20,16,0.52);line-height:1.78;max-width:460px;margin-bottom:36px;">
+        Exploring personal style, slow fashion, and the stories behind what we wear — one wardrobe at a time.
+      </p>
+
+      <!-- CTAs -->
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <button class="btn-white" onclick="document.getElementById('posts').scrollIntoView({behavior:'smooth'})">Read Latest</button>
+        <button class="btn-ghost" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})">About Me</button>
+      </div>
+
+      <!-- Stats strip -->
+      <div style="display:flex;align-items:center;gap:28px;margin-top:52px;padding-top:28px;border-top:1px solid rgba(28,20,16,0.09);flex-wrap:wrap;">
+        <div>
+          <div style="font-size:22px;font-weight:800;letter-spacing:-0.03em;">48+</div>
+          <div style="font-size:11px;color:rgba(28,20,16,0.42);margin-top:2px;font-weight:500;">Articles</div>
+        </div>
+        <div style="width:1px;height:28px;background:rgba(28,20,16,0.1);"></div>
+        <div>
+          <div style="font-size:22px;font-weight:800;letter-spacing:-0.03em;">2.4k</div>
+          <div style="font-size:11px;color:rgba(28,20,16,0.42);margin-top:2px;font-weight:500;">Subscribers</div>
+        </div>
+        <div style="width:1px;height:28px;background:rgba(28,20,16,0.1);"></div>
+        <div>
+          <div style="font-size:22px;font-weight:800;letter-spacing:-0.03em;">5 yrs</div>
+          <div style="font-size:11px;color:rgba(28,20,16,0.42);margin-top:2px;font-weight:500;">Writing</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: floating cards -->
+    <div class="hero-right" style="position:relative;height:500px;">
+
+      <!-- Card 1: large, top-right, image -->
+      <div class="glass float-a" style="position:absolute;top:0;right:0;width:300px;border-radius:20px;overflow:hidden;">
+        <div style="overflow:hidden;height:150px;">
+          <img src="https://placehold.co/300x150/ede9fe/7c3aed?text=✦" alt="" style="width:100%;height:100%;object-fit:cover;display:block;">
+        </div>
+        <div style="padding:16px 18px;">
+          <span style="font-size:10px;font-weight:700;color:#7c3aed;letter-spacing:.08em;text-transform:uppercase;">Style Diaries</span>
+          <div style="font-size:13px;font-weight:600;line-height:1.4;margin:7px 0 8px;color:#1c1410;">Building a Capsule Wardrobe from Scratch</div>
+          <div style="font-size:11px;color:rgba(28,20,16,0.40);">Mar 28 · 6 min read</div>
+        </div>
+      </div>
+
+      <!-- Card 2: text only, mid-left -->
+      <div class="glass float-b" style="position:absolute;top:205px;left:0;width:268px;border-radius:18px;padding:18px;">
+        <span style="font-size:10px;font-weight:700;color:#ea580c;letter-spacing:.08em;text-transform:uppercase;">Slow Fashion</span>
+        <div style="font-size:13px;font-weight:600;line-height:1.4;margin:8px 0 12px;color:#1c1410;">Why I Stopped Shopping Fast Fashion for Good</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div style="font-size:11px;color:rgba(28,20,16,0.40);">Feb 14 · 8 min</div>
+          <div style="display:flex;align-items:center;gap:4px;color:rgba(28,20,16,0.34);">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            <span style="font-size:11px;">243</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Badge pill: bottom right -->
+      <div class="glass float-c" style="position:absolute;bottom:10px;right:10px;border-radius:9999px;padding:10px 18px;display:flex;align-items:center;gap:12px;">
+        <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#7c3aed 0%,#ec4899 100%);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;">✦</div>
+        <div>
+          <div style="font-size:12px;font-weight:600;line-height:1.2;color:#1c1410;">New post every week</div>
+          <div style="font-size:11px;color:rgba(28,20,16,0.42);margin-top:1px;">Don't miss an update</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom fade -->
+  <div style="position:absolute;inset-x:0;bottom:0;height:120px;background:linear-gradient(to bottom,transparent,#faf8f4);pointer-events:none;z-index:1;"></div>
+</section>
+
+<!-- ═══════════════════════════════ LATEST POSTS ══════════════════════════════ -->
+<section id="posts" style="padding:96px 24px;max-width:1200px;margin:0 auto;">
+
+  <!-- Section header -->
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:44px;flex-wrap:wrap;gap:16px;">
+    <div>
+      <div style="font-size:11px;font-weight:700;color:#7c3aed;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;">Latest Articles</div>
+      <h2 style="font-size:clamp(26px,3.5vw,38px);font-weight:800;letter-spacing:-0.025em;line-height:1.1;">Fresh from the Closet</h2>
+    </div>
+    <a href="#" style="font-size:13px;color:rgba(28,20,16,0.45);text-decoration:none;display:flex;align-items:center;gap:6px;font-weight:500;transition:color .18s;" onmouseover="this.style.color='#1c1410'" onmouseout="this.style.color='rgba(28,20,16,0.45)'">
+      View all
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+
+  <!-- Cards grid -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px;">
+
+    <!-- Post 1 -->
+    <article class="glass post-card" tabindex="0">
+      <div style="overflow:hidden;height:196px;">
+        <img src="https://placehold.co/640x196/ede9fe/7c3aed?text=✦" alt="Capsule wardrobe article" class="thumb">
+      </div>
+      <div style="padding:20px;">
+        <span style="font-size:10px;font-weight:700;color:#7c3aed;letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:10px;">Style Diaries</span>
+        <h3 style="font-size:17px;font-weight:700;line-height:1.35;letter-spacing:-0.015em;margin-bottom:9px;">The 10 Pieces I Actually Wear Every Single Week</h3>
+        <p style="font-size:13px;color:rgba(28,20,16,0.50);line-height:1.65;margin-bottom:18px;">After years of overstuffed wardrobes, I've finally narrowed it down to pieces that earn their place every single week.</p>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div style="font-size:11px;color:rgba(28,20,16,0.42);">Apr 1, 2026 · 5 min read</div>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(28,20,16,0.28)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+    </article>
+
+    <!-- Post 2 -->
+    <article class="glass post-card" tabindex="0">
+      <div style="overflow:hidden;height:196px;">
+        <img src="https://placehold.co/640x196/ccfbf1/0d9488?text=✦" alt="Thrift store routine article" class="thumb">
+      </div>
+      <div style="padding:20px;">
+        <span style="font-size:10px;font-weight:700;color:#0d9488;letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:10px;">Slow Fashion</span>
+        <h3 style="font-size:17px;font-weight:700;line-height:1.35;letter-spacing:-0.015em;margin-bottom:9px;">Second-Hand Finds: My Thrift Store Routine</h3>
+        <p style="font-size:13px;color:rgba(28,20,16,0.50);line-height:1.65;margin-bottom:18px;">Thrifting doesn't have to be a treasure hunt in the dark. Here's the repeatable system that works every time.</p>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div style="font-size:11px;color:rgba(28,20,16,0.42);">Mar 24, 2026 · 7 min read</div>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(28,20,16,0.28)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+    </article>
+
+    <!-- Post 3 -->
+    <article class="glass post-card" tabindex="0">
+      <div style="overflow:hidden;height:196px;">
+        <img src="https://placehold.co/640x196/fef3c7/b45309?text=✦" alt="30-day outfit review article" class="thumb">
+      </div>
+      <div style="padding:20px;">
+        <span style="font-size:10px;font-weight:700;color:#b45309;letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:10px;">Outfit Reviews</span>
+        <h3 style="font-size:17px;font-weight:700;line-height:1.35;letter-spacing:-0.015em;margin-bottom:9px;">Reviewing Every Outfit from My Last 30 Days</h3>
+        <p style="font-size:13px;color:rgba(28,20,16,0.50);line-height:1.65;margin-bottom:18px;">An honest look at what I wore, what worked, and what I'd never repeat. Nothing is off limits in this monthly review.</p>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div style="font-size:11px;color:rgba(28,20,16,0.42);">Mar 10, 2026 · 9 min read</div>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(28,20,16,0.28)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<div class="divider" style="max-width:1200px;margin:0 auto;"></div>
+
+<!-- ═══════════════════════════════════ TOPICS ══════════════════════════════════ -->
+<section id="topics" style="padding:96px 24px;max-width:1200px;margin:0 auto;">
+
+  <div style="text-align:center;margin-bottom:52px;">
+    <div style="font-size:11px;font-weight:700;color:#7c3aed;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;">Explore by Topic</div>
+    <h2 style="font-size:clamp(26px,3.5vw,38px);font-weight:800;letter-spacing:-0.025em;">What's in the Closet</h2>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;">
+
+    <div class="glass topic-card" style="padding:26px;" tabindex="0">
+      <div style="font-size:26px;margin-bottom:14px;">👗</div>
+      <div style="font-size:15px;font-weight:700;letter-spacing:-0.01em;margin-bottom:6px;">Style Diaries</div>
+      <div style="font-size:13px;color:rgba(28,20,16,0.48);line-height:1.55;margin-bottom:14px;">Day-to-day looks and outfit breakdowns</div>
+      <div style="font-size:11px;font-weight:600;color:rgba(109,40,217,0.75);">18 articles →</div>
+    </div>
+
+    <div class="glass topic-card" style="padding:26px;" tabindex="0">
+      <div style="font-size:26px;margin-bottom:14px;">♻️</div>
+      <div style="font-size:15px;font-weight:700;letter-spacing:-0.01em;margin-bottom:6px;">Slow Fashion</div>
+      <div style="font-size:13px;color:rgba(28,20,16,0.48);line-height:1.55;margin-bottom:14px;">Ethical choices and sustainable brands</div>
+      <div style="font-size:11px;font-weight:600;color:rgba(13,148,136,0.85);">14 articles →</div>
+    </div>
+
+    <div class="glass topic-card" style="padding:26px;" tabindex="0">
+      <div style="font-size:26px;margin-bottom:14px;">👜</div>
+      <div style="font-size:15px;font-weight:700;letter-spacing:-0.01em;margin-bottom:6px;">Capsule Wardrobe</div>
+      <div style="font-size:13px;color:rgba(28,20,16,0.48);line-height:1.55;margin-bottom:14px;">Minimalist dressing, maximum impact</div>
+      <div style="font-size:11px;font-weight:600;color:rgba(180,83,9,0.85);">11 articles →</div>
+    </div>
+
+    <div class="glass topic-card" style="padding:26px;" tabindex="0">
+      <div style="font-size:26px;margin-bottom:14px;">⭐</div>
+      <div style="font-size:15px;font-weight:700;letter-spacing:-0.01em;margin-bottom:6px;">Outfit Reviews</div>
+      <div style="font-size:13px;color:rgba(28,20,16,0.48);line-height:1.55;margin-bottom:14px;">Honest takes and monthly round-ups</div>
+      <div style="font-size:11px;font-weight:600;color:rgba(190,18,60,0.75);">9 articles →</div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider" style="max-width:1200px;margin:0 auto;"></div>
+
+<!-- ════════════════════════════════════ ABOUT ═══════════════════════════════════ -->
+<section id="about" style="padding:96px 24px;max-width:1200px;margin:0 auto;">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;" class="about-grid">
+
+    <!-- Photo -->
+    <div style="position:relative;">
+      <div class="glass" style="border-radius:24px;overflow:hidden;">
+        <img src="https://placehold.co/560x460/ede9fe/7c3aed?text=✦" alt="Author photo" style="width:100%;height:420px;object-fit:cover;display:block;">
+      </div>
+      <!-- Floating stat badge -->
+      <div class="glass float-a" style="position:absolute;bottom:-18px;right:-14px;border-radius:16px;padding:14px 20px;">
+        <div style="font-size:11px;color:rgba(28,20,16,0.46);margin-bottom:3px;font-weight:500;">Writing since</div>
+        <div style="font-size:22px;font-weight:800;letter-spacing:-0.03em;color:#1c1410;">2019 ✦</div>
+      </div>
+    </div>
+
+    <!-- Text -->
+    <div>
+      <div style="font-size:11px;font-weight:700;color:#7c3aed;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;">About Me</div>
+      <h2 style="font-size:clamp(26px,3.5vw,40px);font-weight:800;letter-spacing:-0.03em;line-height:1.12;margin-bottom:20px;">The person behind<br>the wardrobe.</h2>
+      <p style="font-size:15px;color:rgba(28,20,16,0.52);line-height:1.82;margin-bottom:16px;">
+        Hi, I'm Alex — a fashion writer, slow fashion advocate, and chronic thrift-store addict based in Hanoi. I started Clozet in 2019 as a personal archive and it somehow grew into something much bigger.
+      </p>
+      <p style="font-size:15px;color:rgba(28,20,16,0.52);line-height:1.82;margin-bottom:36px;">
+        I believe getting dressed should feel intentional, not anxious. Everything I write here is in pursuit of that feeling.
+      </p>
+      <button class="btn-ghost">Read my story →</button>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider" style="max-width:1200px;margin:0 auto;"></div>
+
+<!-- ══════════════════════════════════ NEWSLETTER ═════════════════════════════════ -->
+<section id="newsletter" style="padding:96px 24px;max-width:1200px;margin:0 auto;">
+  <div class="mesh glass" style="border-radius:28px;position:relative;overflow:hidden;">
+    <div style="position:relative;z-index:2;text-align:center;">
+      <div style="padding:72px 48px;">
+        <div style="font-size:11px;font-weight:700;color:#7c3aed;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;">Newsletter</div>
+        <h2 style="font-size:clamp(26px,4vw,44px);font-weight:800;letter-spacing:-0.03em;line-height:1.1;margin-bottom:14px;">Style notes, once a week.</h2>
+        <p style="font-size:15px;color:rgba(28,20,16,0.50);max-width:400px;margin:0 auto 38px;line-height:1.72;">Short, thoughtful letters on style and life. No spam — just good reading delivered every Tuesday.</p>
+        <form onsubmit="return false;" style="display:flex;gap:10px;max-width:400px;margin:0 auto;" class="nl-form">
+          <input type="email" class="nl-input" placeholder="your@email.com" aria-label="Email address">
+          <button type="submit" class="btn-white" style="flex-shrink:0;">Subscribe</button>
+        </form>
+        <div style="margin-top:14px;font-size:12px;color:rgba(28,20,16,0.30);">Join 2,400+ readers. Unsubscribe anytime.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════ FOOTER ══════════════════════════════════ -->
+<footer style="border-top:1px solid rgba(28,20,16,0.08);padding:36px 24px 40px;">
+  <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;">
+
+    <!-- Logo + copyright -->
+    <div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;">
+        <svg width="15" height="12" viewBox="0 0 17 14" fill="none" stroke="rgba(28,20,16,0.52)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M8.5 1C8.5 1 11 1 11 3C11 4.2 10 5 8.5 5"/>
+          <path d="M8.5 5L1 12.5H16L8.5 5Z"/>
+        </svg>
+        <span style="font-size:14px;font-weight:700;color:rgba(28,20,16,0.52);">Clozet</span>
+      </div>
+      <div style="font-size:12px;color:rgba(28,20,16,0.30);">© 2026 Clozet. All rights reserved.</div>
+    </div>
+
+    <!-- Footer nav -->
+    <nav style="display:flex;align-items:center;gap:22px;flex-wrap:wrap;" aria-label="Footer navigation">
+      <a href="#posts"      class="nav-link" style="font-size:13px;">Articles</a>
+      <a href="#topics"     class="nav-link" style="font-size:13px;">Topics</a>
+      <a href="#about"      class="nav-link" style="font-size:13px;">About</a>
+      <a href="#newsletter" class="nav-link" style="font-size:13px;">Newsletter</a>
+    </nav>
+
+    <!-- Social icons -->
+    <div style="display:flex;align-items:center;gap:10px;">
+      <a href="#" class="social-btn" aria-label="Instagram">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+      </a>
+      <a href="#" class="social-btn" aria-label="Pinterest">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 0 1 .083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>
+      </a>
+      <a href="#" class="social-btn" aria-label="X / Twitter">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.742l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+    </div>
+
+  </div>
+</footer>
+
+</body>
+</html>
