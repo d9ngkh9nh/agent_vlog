@@ -533,44 +533,230 @@
 <div class="divider" style="max-width:1200px;margin:0 auto;"></div>
 
 <!-- ═══════════════════════════════════ TOPICS ══════════════════════════════════ -->
-<section id="topics" style="padding:96px 24px;max-width:1200px;margin:0 auto;">
+<section id="topics" style="padding:80px 0 0;overflow:hidden;position:relative;">
 
-  <div class="reveal" style="text-align:center;margin-bottom:52px;">
-    <div style="font-size:11px;font-weight:700;color:#7c3aed;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;">Explore by Topic</div>
-    <h2 style="font-size:clamp(26px,3.5vw,38px);font-weight:800;letter-spacing:-0.025em;">What's in the Closet</h2>
+  <!-- Header -->
+  <div class="reveal" style="padding:0 clamp(20px,5vw,80px);margin-bottom:0;">
+    <h2 style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(28px,3.5vw,44px);font-weight:600;letter-spacing:-0.01em;color:#1c1410;margin-bottom:6px;">What's in the Closet</h2>
+    <p style="font-family:'Courier New',Courier,monospace;font-size:10px;font-weight:400;letter-spacing:.14em;text-transform:uppercase;color:rgba(28,20,16,0.38);">Explore by Topic</p>
   </div>
 
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;">
+  <!-- Wave canvas -->
+  <div id="wave-stage" style="position:relative;width:100%;height:clamp(320px,42vw,500px);margin-top:0;">
 
-    <div class="glass topic-card reveal d1" style="padding:26px;" tabindex="0">
-      <div style="font-size:26px;margin-bottom:14px;">👗</div>
-      <div style="font-size:15px;font-weight:700;letter-spacing:-0.01em;margin-bottom:6px;">Style Diaries</div>
-      <div style="font-size:13px;color:rgba(28,20,16,0.48);line-height:1.55;margin-bottom:14px;">Day-to-day looks and outfit breakdowns</div>
-      <div style="font-size:11px;font-weight:600;color:rgba(109,40,217,0.75);">18 articles →</div>
+    <!-- SVG wave + hanger -->
+    <svg id="wave-svg" viewBox="0 0 1200 480" preserveAspectRatio="xMidYMid meet"
+         style="width:100%;height:100%;display:block;overflow:visible;" aria-hidden="true">
+
+      <!-- The sine wave path -->
+      <path id="wave-path"
+        d="M -40 445 C 110 445, 270 195, 405 195 C 540 195, 650 460, 770 460 C 890 460, 1030 205, 1155 205 L 1260 205"
+        fill="none"
+        stroke="rgba(28,20,16,0.14)"
+        stroke-width="1"
+        vector-effect="non-scaling-stroke"/>
+
+      <!-- Hanger icon — will be translated by JS -->
+      <g id="hanger-rider" style="pointer-events:none;">
+        <!-- hanger drawn: hook top, then trapezoid body -->
+        <path d="M 0 -22 C 0 -22, 7 -22, 7 -16 C 7 -11, 3 -8, 0 -8"
+              fill="none" stroke="#1c1410" stroke-width="1.4" stroke-linecap="round"/>
+        <path d="M 0 -8 L -18 8 L 18 8 Z"
+              fill="none" stroke="#1c1410" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+    </svg>
+
+    <!-- Topic labels — positioned as HTML over the SVG using percentage coords -->
+    <!-- Positions are derived from SVG path shape, scaled to percentage of wave-stage -->
+
+    <!-- style diaries — near start (left, low) -->
+    <div class="wave-label" data-idx="0"
+         style="left:1%;bottom:14%;"
+         data-tip-title="Style Diaries"
+         data-tip-desc="Day-to-day looks and outfit breakdowns"
+         data-tip-count="18 articles"
+         data-tip-color="#7c3aed">
+      style diaries
     </div>
 
-    <div class="glass topic-card reveal d2" style="padding:26px;" tabindex="0">
-      <div style="font-size:26px;margin-bottom:14px;">♻️</div>
-      <div style="font-size:15px;font-weight:700;letter-spacing:-0.01em;margin-bottom:6px;">Slow Fashion</div>
-      <div style="font-size:13px;color:rgba(28,20,16,0.48);line-height:1.55;margin-bottom:14px;">Ethical choices and sustainable brands</div>
-      <div style="font-size:11px;font-weight:600;color:rgba(13,148,136,0.85);">14 articles →</div>
+    <!-- slow fashion — first peak (left-centre, high) -->
+    <div class="wave-label" data-idx="1"
+         style="left:30%;top:22%;"
+         data-tip-title="Slow Fashion"
+         data-tip-desc="Ethical choices and sustainable brands"
+         data-tip-count="14 articles"
+         data-tip-color="#0d9488">
+      slow fashion
     </div>
 
-    <div class="glass topic-card reveal d3" style="padding:26px;" tabindex="0">
-      <div style="font-size:26px;margin-bottom:14px;">👜</div>
-      <div style="font-size:15px;font-weight:700;letter-spacing:-0.01em;margin-bottom:6px;">Capsule Wardrobe</div>
-      <div style="font-size:13px;color:rgba(28,20,16,0.48);line-height:1.55;margin-bottom:14px;">Minimalist dressing, maximum impact</div>
-      <div style="font-size:11px;font-weight:600;color:rgba(180,83,9,0.85);">11 articles →</div>
+    <!-- capsule wardrobe — trough (centre, low) -->
+    <div class="wave-label" data-idx="2"
+         style="left:58%;bottom:8%;"
+         data-tip-title="Capsule Wardrobe"
+         data-tip-desc="Minimalist dressing, maximum impact"
+         data-tip-count="11 articles"
+         data-tip-color="#b45309">
+      capsule wardrobe
     </div>
 
-    <div class="glass topic-card reveal d4" style="padding:26px;" tabindex="0">
-      <div style="font-size:26px;margin-bottom:14px;">⭐</div>
-      <div style="font-size:15px;font-weight:700;letter-spacing:-0.01em;margin-bottom:6px;">Outfit Reviews</div>
-      <div style="font-size:13px;color:rgba(28,20,16,0.48);line-height:1.55;margin-bottom:14px;">Honest takes and monthly round-ups</div>
-      <div style="font-size:11px;font-weight:600;color:rgba(190,18,60,0.75);">9 articles →</div>
+    <!-- outfit reviews — second peak (right, high) -->
+    <div class="wave-label" data-idx="3"
+         style="right:3%;top:26%;"
+         data-tip-title="Outfit Reviews"
+         data-tip-desc="Honest takes and monthly round-ups"
+         data-tip-count="9 articles"
+         data-tip-color="#be123c">
+      outfit reviews
     </div>
 
+    <!-- Tooltip (single, repositioned by JS) -->
+    <div id="wave-tooltip" role="tooltip" aria-live="polite">
+      <div id="wt-count"></div>
+      <div id="wt-title"></div>
+      <div id="wt-desc"></div>
+    </div>
   </div>
+
+  <style>
+    /* ── Wave label ── */
+    .wave-label {
+      position: absolute;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: clamp(11px, 1.3vw, 14px);
+      letter-spacing: .08em;
+      color: rgba(28,20,16,0.42);
+      cursor: default;
+      user-select: none;
+      transition: color 0.22s;
+      white-space: nowrap;
+      line-height: 1;
+    }
+    .wave-label:hover { color: #1c1410; }
+
+    /* ── Tooltip ── */
+    #wave-tooltip {
+      position: absolute;
+      background: #1c1410;
+      color: #faf8f4;
+      border-radius: 12px;
+      padding: 12px 16px;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.20s ease, transform 0.20s ease;
+      z-index: 20;
+      min-width: 160px;
+      box-shadow: 0 8px 32px rgba(28,20,16,0.18);
+    }
+    #wave-tooltip.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    #wt-count {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 9px; letter-spacing: .12em; text-transform: uppercase;
+      color: rgba(250,248,244,0.40); margin-bottom: 5px;
+    }
+    #wt-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 15px; font-weight: 600; margin-bottom: 4px;
+      color: #faf8f4;
+    }
+    #wt-desc {
+      font-size: 11px; color: rgba(250,248,244,0.55); line-height: 1.55;
+    }
+
+    /* ── Mobile: hide wave, show simple list ── */
+    @media (max-width: 600px) {
+      #wave-stage { height: 280px; }
+      .wave-label { font-size: 10px; }
+      #wave-tooltip { display: none; }
+    }
+  </style>
+
+  <script>
+  (function() {
+    const path   = document.getElementById('wave-path');
+    const rider  = document.getElementById('hanger-rider');
+    const tip    = document.getElementById('wave-tooltip');
+    const stage  = document.getElementById('wave-stage');
+    const labels = document.querySelectorAll('.wave-label');
+
+    /* ── Hanger animation along path ── */
+    const TOTAL = path.getTotalLength();
+    const MIN_T = 0.02;
+    const MAX_T = 0.98;
+    let t = MIN_T;
+    let dir = 1;
+    let lastTs = null;
+    const SPEED = 0.000055; // fraction of path per ms
+
+    function tick(ts) {
+      if (!lastTs) lastTs = ts;
+      const dt = Math.min(ts - lastTs, 32); // cap at ~30fps delta
+      lastTs = ts;
+
+      t += dir * SPEED * dt;
+      if (t >= MAX_T) { t = MAX_T; dir = -1; }
+      if (t <= MIN_T) { t = MIN_T; dir =  1; }
+
+      const pt = path.getPointAtLength(t * TOTAL);
+
+      // Get SVG coordinate space → screen space via the SVG element's CTM
+      const svg   = document.getElementById('wave-svg');
+      const ctm   = svg.getScreenCTM();
+      const stageRect = stage.getBoundingClientRect();
+
+      // Convert SVG point to stage-relative px
+      const svgPt = svg.createSVGPoint();
+      svgPt.x = pt.x; svgPt.y = pt.y;
+      const screenPt = svgPt.matrixTransform(ctm);
+      const stageX = screenPt.x - stageRect.left;
+      const stageY = screenPt.y - stageRect.top;
+
+      // Position hanger via transform in SVG coordinate space
+      rider.setAttribute('transform', `translate(${pt.x}, ${pt.y})`);
+
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+
+    /* ── Tooltip logic ── */
+    labels.forEach(label => {
+      label.addEventListener('mouseenter', (e) => {
+        const title = label.dataset.tipTitle;
+        const desc  = label.dataset.tipDesc;
+        const count = label.dataset.tipCount;
+        const color = label.dataset.tipColor;
+
+        document.getElementById('wt-count').textContent = count;
+        document.getElementById('wt-title').textContent = title;
+        document.getElementById('wt-title').style.color = color;
+        document.getElementById('wt-desc').textContent  = desc;
+
+        // Position tooltip above the label
+        const stageRect = stage.getBoundingClientRect();
+        const labelRect = label.getBoundingClientRect();
+        let left = labelRect.left - stageRect.left + labelRect.width / 2;
+        let top  = labelRect.top  - stageRect.top  - 88;
+
+        // Clamp to stage bounds
+        const tipW = 190;
+        left = Math.max(8, Math.min(left - tipW / 2, stageRect.width - tipW - 8));
+        top  = Math.max(8, top);
+
+        tip.style.left = left + 'px';
+        tip.style.top  = top  + 'px';
+        tip.classList.add('visible');
+      });
+
+      label.addEventListener('mouseleave', () => {
+        tip.classList.remove('visible');
+      });
+    });
+  })();
+  </script>
+
 </section>
 
 <div class="divider" style="max-width:1200px;margin:0 auto;"></div>
