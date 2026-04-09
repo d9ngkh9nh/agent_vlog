@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Performative Male: A Field Guide — Clozet</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #faf8f4;
+      --ink:     #1c1410;
+      --ink-60:  rgba(28,20,16,0.60);
+      --ink-40:  rgba(28,20,16,0.40);
+      --ink-10:  rgba(28,20,16,0.10);
+      --accent:  #b45309;  /* amber — Outfit Reviews category */
+      --accent2: #7c3aed;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Reading progress ── */
+    #progress-bar {
+      position: fixed; top: 0; left: 0; height: 2px; width: 0%;
+      background: linear-gradient(90deg, var(--accent), #f59e0b);
+      z-index: 100; transition: width 0.1s linear;
+    }
+
+    /* ── Nav ── */
+    .glass-nav {
+      background: rgba(250,248,244,0.90);
+      backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--ink-10);
+    }
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      color: var(--ink-60); font-size: 13px; font-weight: 500;
+      text-decoration: none; transition: color 0.18s;
+    }
+    .back-btn:hover { color: var(--ink); }
+
+    /* ── Hero: full-bleed with diagonal split overlay ── */
+    .hero-wrap {
+      position: relative;
+      height: min(82vh, 680px);
+      overflow: hidden;
+      background: #1a0f00;
+    }
+    .hero-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; display: block; }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(125deg,
+        rgba(28,12,0,0.88) 0%,
+        rgba(28,12,0,0.55) 40%,
+        transparent 70%
+      );
+    }
+    .hero-content {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: clamp(28px,5vw,80px) clamp(20px,6vw,96px);
+      max-width: 780px;
+    }
+    .hero-eyebrow {
+      font-size: 10px; font-weight: 700; letter-spacing: .12em;
+      text-transform: uppercase; color: rgba(251,191,36,0.90);
+      margin-bottom: 20px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .hero-eyebrow::before {
+      content: ''; display: inline-block;
+      width: 24px; height: 1.5px; background: rgba(251,191,36,0.9);
+    }
+    .hero-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(32px, 5.5vw, 64px);
+      font-weight: 800; line-height: 1.06; letter-spacing: -0.02em;
+      color: #fff; margin-bottom: 18px;
+    }
+    .hero-title em { font-style: italic; color: #fbbf24; }
+    .hero-deck {
+      font-size: clamp(15px, 2vw, 17px); color: rgba(255,255,255,0.62);
+      line-height: 1.72; max-width: 500px; margin-bottom: 28px;
+    }
+    .hero-meta {
+      display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+      font-size: 12px; color: rgba(255,255,255,0.45);
+    }
+    .hero-meta .dot { width: 3px; height: 3px; border-radius: 50%; background: rgba(255,255,255,0.25); }
+
+    /* ── Warning banner ── */
+    .warning-banner {
+      background: #fffbeb; border: 1px solid #fde68a;
+      border-radius: 12px; padding: 14px 18px;
+      display: flex; gap: 12px; align-items: flex-start;
+      margin-bottom: 36px;
+    }
+    .warning-banner p { font-size: 13px; line-height: 1.65; color: #92400e; }
+    .warning-banner strong { font-weight: 700; }
+
+    /* ── Article body ── */
+    .article-body { max-width: 740px; margin: 0 auto; padding: 64px 24px 100px; }
+
+    /* ── Drop cap ── */
+    .drop-cap::first-letter {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 4.8em; font-weight: 800; line-height: 0.78;
+      float: left; margin: 4px 12px 0 0; color: var(--accent);
+    }
+    .lead-para { font-size: 19px; line-height: 1.78; color: var(--ink); font-weight: 400; margin-bottom: 32px; }
+    .body-para { font-size: 16px; line-height: 1.86; color: var(--ink-60); margin-bottom: 24px; }
+
+    /* ── Byline ── */
+    .byline {
+      display: flex; align-items: center; gap: 14px;
+      padding: 24px 0; border-top: 1px solid var(--ink-10);
+      border-bottom: 1px solid var(--ink-10); margin-bottom: 40px;
+    }
+    .byline-name { font-size: 14px; font-weight: 700; }
+    .byline-date { font-size: 12px; color: var(--ink-40); margin-top: 2px; }
+
+    /* ── Tag strip ── */
+    .tag-strip { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 44px; }
+    .tag { padding: 4px 12px; border-radius: 9999px; border: 1px solid var(--ink-10); font-size: 11px; font-weight: 600; color: var(--ink-60); }
+
+    /* ── Section divider ── */
+    .section-divider {
+      margin: 52px 0; display: flex; align-items: center; gap: 16px;
+    }
+    .section-divider::before, .section-divider::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--ink-10));
+    }
+    .section-divider::after { background: linear-gradient(90deg, var(--ink-10), transparent); }
+    .section-divider span { font-size: 16px; flex-shrink: 0; }
+
+    /* ── Pull quote — styled differently from articles 1 & 2 ── */
+    .pull-quote {
+      margin: 52px -24px;
+      background: #1c1410;
+      padding: 36px 40px;
+      border-radius: 0;
+      position: relative;
+    }
+    .pull-quote blockquote {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(18px, 3vw, 24px);
+      font-style: italic; font-weight: 500;
+      line-height: 1.52; color: #fbbf24;
+    }
+    .pull-quote cite {
+      display: block; margin-top: 12px;
+      font-size: 11px; font-style: normal; font-weight: 600;
+      letter-spacing: .10em; text-transform: uppercase;
+      color: rgba(255,255,255,0.40);
+    }
+
+    /* ── Species card — the signature design of this article ── */
+    .species-card {
+      border-radius: 22px; overflow: hidden;
+      border: 1px solid var(--ink-10);
+      margin: 52px 0; background: #fff;
+    }
+    .species-img {
+      position: relative; height: clamp(200px, 38vw, 360px);
+      overflow: hidden; background: #d8ccb8;
+    }
+    .species-img img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform 0.5s;
+    }
+    .species-card:hover .species-img img { transform: scale(1.03); }
+    .species-badge {
+      position: absolute; top: 18px; left: 18px;
+      background: var(--accent); color: #fff;
+      font-size: 9px; font-weight: 800; letter-spacing: .10em;
+      text-transform: uppercase; padding: 5px 13px; border-radius: 9999px;
+    }
+    .danger-badge {
+      position: absolute; top: 18px; right: 18px;
+      background: rgba(0,0,0,0.55); color: #fff;
+      font-size: 9px; font-weight: 700; letter-spacing: .06em;
+      padding: 5px 12px; border-radius: 9999px;
+      display: flex; align-items: center; gap: 5px;
+    }
+    .species-body { padding: 26px 28px 22px; }
+    .species-name {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(20px, 3vw, 28px);
+      font-weight: 700; color: var(--ink); margin-bottom: 4px;
+    }
+    .species-subtitle {
+      font-size: 12px; color: var(--ink-40); font-style: italic;
+      margin-bottom: 18px;
+    }
+    .species-desc { font-size: 15px; line-height: 1.82; color: var(--ink-60); margin-bottom: 20px; }
+
+    /* Stats row inside species card */
+    .species-stats {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 12px; padding-top: 18px; border-top: 1px solid var(--ink-10);
+      margin-bottom: 18px;
+    }
+    .stat-cell { display: flex; flex-direction: column; gap: 3px; }
+    .stat-label { font-size: 9px; font-weight: 700; letter-spacing: .10em; text-transform: uppercase; color: var(--ink-40); }
+    .stat-val   { font-size: 13px; font-weight: 700; color: var(--ink); line-height: 1.3; }
+
+    /* Giveaway list inside species card */
+    .giveaway-list {
+      background: #faf8f4; border-radius: 12px; padding: 14px 16px;
+    }
+    .giveaway-label {
+      font-size: 9px; font-weight: 700; letter-spacing: .10em;
+      text-transform: uppercase; color: var(--ink-40); margin-bottom: 10px;
+    }
+    .giveaway-list ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+    .giveaway-list li {
+      font-size: 12px; color: var(--ink-60); line-height: 1.5;
+      display: flex; align-items: flex-start; gap: 8px;
+    }
+    .giveaway-list li::before {
+      content: '→'; color: var(--accent); font-weight: 700; flex-shrink: 0; margin-top: 1px;
+    }
+
+    /* ── Photo block ── */
+    .photo-full { margin: 44px -24px; overflow: hidden; }
+    .photo-full img { width: 100%; display: block; height: clamp(240px, 45vw, 480px); object-fit: cover; }
+    .photo-caption { font-size: 11px; color: var(--ink-40); text-align: center; margin-top: 10px; letter-spacing: .02em; font-style: italic; }
+
+    /* ── Taxonomy table ── */
+    .taxonomy-table {
+      width: 100%; border-collapse: collapse;
+      margin: 40px 0; font-size: 13px;
+      border-radius: 14px; overflow: hidden;
+      border: 1px solid var(--ink-10);
+    }
+    .taxonomy-table thead tr { background: #1c1410; }
+    .taxonomy-table thead th {
+      padding: 12px 16px; text-align: left;
+      font-size: 9px; font-weight: 700; letter-spacing: .10em;
+      text-transform: uppercase; color: rgba(255,255,255,0.60);
+    }
+    .taxonomy-table tbody tr { border-bottom: 1px solid var(--ink-10); }
+    .taxonomy-table tbody tr:last-child { border-bottom: none; }
+    .taxonomy-table tbody tr:nth-child(even) { background: rgba(255,255,255,0.55); }
+    .taxonomy-table td { padding: 13px 16px; color: var(--ink-60); vertical-align: top; }
+    .taxonomy-table td:first-child { font-weight: 700; color: var(--ink); }
+    .taxonomy-table td .pill {
+      display: inline-block; padding: 2px 8px; border-radius: 9999px;
+      font-size: 10px; font-weight: 600; white-space: nowrap;
+    }
+    .pill-amber  { background: rgba(180,83,9,0.10); color: #b45309; }
+    .pill-purple { background: rgba(124,58,237,0.10); color: #7c3aed; }
+    .pill-teal   { background: rgba(13,148,136,0.10); color: #0d9488; }
+    .pill-red    { background: rgba(190,18,60,0.10); color: #be123c; }
+    .pill-blue   { background: rgba(37,99,235,0.10); color: #2563eb; }
+
+    /* ── Comic observation box ── */
+    .comic-box {
+      background: #fff8ed; border: 1px solid #fde68a;
+      border-left: 4px solid #f59e0b;
+      border-radius: 10px; padding: 16px 18px;
+      margin: 32px 0;
+      font-size: 13px; line-height: 1.70; color: #92400e;
+    }
+    .comic-box .cb-label {
+      font-size: 9px; font-weight: 800; letter-spacing: .12em;
+      text-transform: uppercase; color: #d97706; margin-bottom: 6px;
+    }
+
+    /* ── More articles ── */
+    .more-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; margin-top: 24px; }
+    .more-card { border-radius: 16px; overflow: hidden; border: 1px solid var(--ink-10); background: rgba(255,255,255,0.65); text-decoration: none; color: inherit; transition: transform 0.22s, box-shadow 0.22s; display: block; }
+    .more-card:hover { transform: translateY(-4px); box-shadow: 0 14px 40px rgba(28,20,16,0.09); }
+    .more-card img { width: 100%; height: 150px; object-fit: cover; display: block; }
+    .more-card-body { padding: 14px; }
+    .more-card-tag { font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 5px; }
+    .more-card-title { font-size: 14px; font-weight: 700; line-height: 1.35; }
+
+    /* ── Footer ── */
+    footer { border-top: 1px solid var(--ink-10); padding: 30px 24px 36px; }
+
+    /* ── Scroll animations ── */
+    .reveal {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.70s cubic-bezier(0.22,1,0.36,1), transform 0.70s cubic-bezier(0.22,1,0.36,1);
+      will-change: opacity, transform;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+    .d1 { transition-delay: 0.08s; } .d2 { transition-delay: 0.16s; }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 767px) {
+      .article-body { padding: 44px 20px 72px; }
+      .photo-full   { margin: 32px -20px; }
+      .pull-quote   { margin: 40px -20px; padding: 28px 24px; }
+      .species-body { padding: 20px 18px 16px; }
+    }
+    @media (max-width: 640px) {
+      .hero-content  { padding: 28px 20px 36px; justify-content: flex-end; }
+      .hero-wrap     { height: min(72vh, 520px); }
+      .lead-para     { font-size: 17px; }
+      .drop-cap::first-letter { font-size: 3.6em; }
+      .species-stats { grid-template-columns: repeat(2, 1fr); }
+      .more-grid     { grid-template-columns: 1fr; }
+      .taxonomy-table { font-size: 12px; }
+      .taxonomy-table td, .taxonomy-table th { padding: 10px 12px; }
+    }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: rgba(28,20,16,0.15); border-radius: 5px; }
+  </style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<!-- ── Nav ── -->
+<header class="glass-nav" style="position:sticky;top:0;z-index:50;">
+  <div style="max-width:1200px;margin:0 auto;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;">
+    <a href="../index.html" class="back-btn">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Back to Clozet
+    </a>
+    <a href="../index.html" style="text-decoration:none;display:flex;align-items:center;gap:7px;">
+      <svg width="15" height="12" viewBox="0 0 17 14" fill="none" stroke="#1c1410" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 1C8.5 1 11 1 11 3C11 4.2 10 5 8.5 5"/><path d="M8.5 5L1 12.5H16L8.5 5Z"/></svg>
+      <span style="font-size:14px;font-weight:700;color:#1c1410;">Clozet</span>
+    </a>
+    <a href="../index.html#newsletter" style="font-size:13px;font-weight:500;color:rgba(28,20,16,0.55);text-decoration:none;" onmouseover="this.style.color='#1c1410'" onmouseout="this.style.color='rgba(28,20,16,0.55)'">Subscribe</a>
+  </div>
+</header>
+
+<!-- ── Hero ── -->
+<div class="hero-wrap">
+  <img src="../images/articles/03-performative-male/hero.jpg" alt="Performative male style editorial" class="hero-img">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Outfit Reviews · Style Commentary</p>
+    <h1 class="hero-title">The Performative Male:<br><em>A Field Guide</em></h1>
+    <p class="hero-deck">Six distinct species of men who dress not for themselves, but for the audience they are desperately hoping is watching.</p>
+    <div class="hero-meta">
+      <span>Alex Nguyen</span>
+      <span class="dot"></span>
+      <span>Mar 10, 2026</span>
+      <span class="dot"></span>
+      <span>9 min read</span>
+      <span class="dot"></span>
+      <span style="color:#fbbf24;">Outfit Reviews</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── Article body ── -->
+<article class="article-body">
+
+  <!-- Byline -->
+  <div class="byline reveal">
+    <img src="https://placehold.co/44x44/ede9fe/7c3aed?text=A" alt="Alex Nguyen" style="width:44px;height:44px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+    <div>
+      <div class="byline-name">Alex Nguyen</div>
+      <div class="byline-date">March 10, 2026 · 9 min read</div>
+    </div>
+  </div>
+
+  <!-- Tags -->
+  <div class="tag-strip">
+    <span class="tag">Outfit Reviews</span>
+    <span class="tag">Style Commentary</span>
+    <span class="tag">Men's Fashion</span>
+    <span class="tag">Culture</span>
+  </div>
+
+  <!-- Disclaimer -->
+  <div class="warning-banner reveal">
+    <span style="font-size:20px;flex-shrink:0;">⚠️</span>
+    <p><strong>A note before we begin:</strong> This article contains observations about real men in the wild. If you recognise yourself in any of the following descriptions, I want you to know two things: first, you are not alone; second, your Salomons have never once touched a trail.</p>
+  </div>
+
+  <!-- Intro -->
+  <p class="lead-para drop-cap">
+    Every man thinks he gets dressed for himself. He is wrong.
+  </p>
+  <p class="body-para">
+    Whether he admits it or not, the average man's wardrobe is less a collection of clothes and more a carefully curated argument about who he is. Every item — from the deliberately distressed denim to the $400 fleece vest he doesn't need because he works from a climate-controlled apartment — is a sentence in a story he's been telling to anyone who'll look.
+  </p>
+  <p class="body-para">
+    The performative male is not a new creature. Thorstein Veblen wrote about him in 1899. Pierre Bourdieu wrote about him in 1979. TikTok simply gave him a comment section and the ability to see exactly how well the performance is landing.
+  </p>
+  <p class="body-para">
+    What follows is a field guide. Consider it a public service. These are the six most common species of performative male, their natural habitats, their signature plumage, and — crucially — the one question guaranteed to unravel the entire performance if you ask it out loud.
+  </p>
+
+  <!-- Taxonomy table -->
+  <p style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-40);margin-bottom:12px;">Quick Reference Taxonomy</p>
+  <table class="taxonomy-table reveal">
+    <thead>
+      <tr>
+        <th>Species</th>
+        <th>What They're Performing</th>
+        <th>Signature Item</th>
+        <th>Threat Level</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>The Soft Male</td>
+        <td>Emotional availability</td>
+        <td>Canvas tote bag</td>
+        <td><span class="pill pill-purple">Harmless</span></td>
+      </tr>
+      <tr>
+        <td>The Gorpcore Guy</td>
+        <td>Outdoor competence</td>
+        <td>Salomon trail runners</td>
+        <td><span class="pill pill-teal">Mild</span></td>
+      </tr>
+      <tr>
+        <td>The Tech Bro</td>
+        <td>Casual power</td>
+        <td>Patagonia vest</td>
+        <td><span class="pill pill-blue">Moderate</span></td>
+      </tr>
+      <tr>
+        <td>The Hype Beast</td>
+        <td>Cultural knowledge</td>
+        <td>Unworn limited-edition sneakers</td>
+        <td><span class="pill pill-amber">Significant</span></td>
+      </tr>
+      <tr>
+        <td>The Gym Bro</td>
+        <td>Physical optimisation</td>
+        <td>$200 compression shorts</td>
+        <td><span class="pill pill-amber">Significant</span></td>
+      </tr>
+      <tr>
+        <td>The Wanderer</td>
+        <td>Worldly non-conformism</td>
+        <td>Linen shirt, permanently wrinkled</td>
+        <td><span class="pill pill-red">Dangerous</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="section-divider reveal"><span>🔍</span></div>
+
+  <!-- Species 1 -->
+  <div class="species-card reveal" id="species-1">
+    <div class="species-img">
+      <img src="../images/articles/03-performative-male/soft-male.jpg" alt="The Soft Performative Male">
+      <div class="species-badge">Species 01</div>
+      <div class="danger-badge">⚡ Threat: Low</div>
+    </div>
+    <div class="species-body">
+      <div class="species-name">The Soft Performative Male</div>
+      <div class="species-subtitle">Also known as: The Chalamet, The Sensitive Intellectual, The One Who Owns Incense</div>
+      <div class="species-stats">
+        <div class="stat-cell"><span class="stat-label">Habitat</span><span class="stat-val">Independent bookstore, farmers' market, oat milk café</span></div>
+        <div class="stat-cell"><span class="stat-label">Signature drink</span><span class="stat-val">Iced oat matcha (obviously)</span></div>
+        <div class="stat-cell"><span class="stat-label">Power item</span><span class="stat-val">Strand Bookstore tote bag</span></div>
+      </div>
+      <p class="species-desc">
+        The most discussed species of 2025. You will recognise him by the canvas tote bag that contains, at all times: one paperback (spine facing outward, always), a film camera, wired earphones he insists sound better than AirPods, and a Labubu keychain from a blind box series he absolutely "just happened to get."
+      </p>
+      <p class="species-desc">
+        The wardrobe is a carefully assembled argument that he is emotionally available, culturally fluent, and feminist-aligned. Thrifted cardigan. Baggy jeans. Doc Martens or worn-in leather loafers. Multiple delicate silver rings. Round-frame glasses for the academic air, regardless of whether his vision is fine. His Substack is called something like <em>soft edges</em> and contains three posts, the last of which was published in October.
+      </p>
+      <p class="species-desc">
+        The tell? Ask him what the bell hooks book is actually about. Not the title. The book.
+      </p>
+      <div class="giveaway-list">
+        <div class="giveaway-label">Instant giveaways</div>
+        <ul>
+          <li>Book spine is perfectly uncreased despite "having read it three times"</li>
+          <li>The tote bag strap is positioned to maximise title visibility in photos</li>
+          <li>Listens to Clairo, Laufey, boygenius — can name all three, can hum none</li>
+          <li>Has a very strong opinion about "finding the right coffee shop energy"</li>
+          <li>The film camera has never produced a photo he was satisfied with</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="comic-box reveal">
+    <div class="cb-label">Field Observation</div>
+    The tote bag has done more cultural lifting than any garment in the history of fashion. It is no longer a bag. It is a manifesto. It is a dating profile. It is a very small billboard for your entire inner life. Men who carry the right tote bag in the right neighbourhood have achieved something that neither cologne nor a fitted blazer has ever managed: they have made their personality visible from twenty metres away.
+  </div>
+
+  <!-- Species 2 -->
+  <div class="species-card reveal" id="species-2">
+    <div class="species-img" style="background:#c8bfb0;">
+      <img src="../images/articles/03-performative-male/gorpcore.jpg" alt="The Gorpcore Guy">
+      <div class="species-badge">Species 02</div>
+      <div class="danger-badge">⚡ Threat: Mild</div>
+    </div>
+    <div class="species-body">
+      <div class="species-name">The Gorpcore Guy</div>
+      <div class="species-subtitle">Also known as: The Arc'teryx Civilian, The Indoor Mountaineer, The One With the Nalgene</div>
+      <div class="species-stats">
+        <div class="stat-cell"><span class="stat-label">Habitat</span><span class="stat-val">Whole Foods, farmers' market, "nice" brunch spots</span></div>
+        <div class="stat-cell"><span class="stat-label">Signature item</span><span class="stat-val">Arc'teryx shell jacket, $700</span></div>
+        <div class="stat-cell"><span class="stat-label">Most-visited terrain</span><span class="stat-val">Parking lot, elevated</span></div>
+      </div>
+      <p class="species-desc">
+        Gorpcore — named after trail mix, the food of people who actually go outside — is the performance of outdoor competence without any of the outdoor activity. The Gorpcore Guy wears technical gear built to survive a Norwegian winter to walk from his apartment to a café that charges $7 for a pastry.
+      </p>
+      <p class="species-desc">
+        The Arc'teryx jacket (GORE-TEX, waterproof to extreme conditions) protects him from mild drizzle. The Salomon trail runners (engineered for mountain terrain) navigate tile floors. The Nalgene water bottle (built to survive falls off cliffs) contains filtered tap water and a reusable straw. This is survival gear for a world where the main hazard is your reservation being misheard at the host stand.
+      </p>
+      <p class="species-desc">
+        GQ once noted that "gorpcore is the only performance aesthetic that's actually performing" — meaning the gear was at least <em>designed</em> for what it signals. Whether the wearer has ever activated its purpose is a different question entirely.
+      </p>
+      <div class="giveaway-list">
+        <div class="giveaway-label">Instant giveaways</div>
+        <ul>
+          <li>Jacket has no mud on it. Not a single scuff. It is a flag, not a tool.</li>
+          <li>The Nalgene has stickers from parks he "wants to visit"</li>
+          <li>Last outdoor activity: walking to the car</li>
+          <li>Can name three colourways of the Arc'teryx Beta AR. Has been to zero mountains.</li>
+          <li>The Salomon runners are clean enough to eat off</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="pull-quote reveal">
+    <blockquote>
+      "He is communicating: I could survive without infrastructure if I had to. The punchline is that the only thing being conquered is the queue at Blue Bottle Coffee."
+    </blockquote>
+    <cite>— Clozet, March 2026</cite>
+  </div>
+
+  <!-- Species 3 -->
+  <div class="species-card reveal" id="species-3">
+    <div class="species-img" style="background:#d4cfc8;">
+      <img src="../images/articles/03-performative-male/tech-bro.jpg" alt="The Tech Bro in Patagonia Vest">
+      <div class="species-badge">Species 03</div>
+      <div class="danger-badge">⚡ Threat: Moderate</div>
+    </div>
+    <div class="species-body">
+      <div class="species-name">The Tech Bro in a Patagonia Vest</div>
+      <div class="species-subtitle">Also known as: The Fleece Vest of Power, The Casual Billionaire, The "I Don't Care About Appearances" Guy</div>
+      <div class="species-stats">
+        <div class="stat-cell"><span class="stat-label">Habitat</span><span class="stat-val">WeWork, Series A pitch decks, airport lounges</span></div>
+        <div class="stat-cell"><span class="stat-label">Signature item</span><span class="stat-val">Patagonia vest, $250, over a $120 merino crew</span></div>
+        <div class="stat-cell"><span class="stat-label">Performance goal</span><span class="stat-val">"I transcended peacocking"</span></div>
+      </div>
+      <p class="species-desc">
+        The Patagonia vest became so associated with tech and finance that it was nicknamed "the fleece vest of power" — and then the men wearing it had to decide whether to keep wearing it ironically or stop wearing it entirely, which is itself a performance. Most kept wearing it.
+      </p>
+      <p class="species-desc">
+        The Silicon Valley uniform communicates something very specific: <em>I am casual about wealth. I have transcended the need to impress you through clothing. I care about outcomes, not appearances.</em> This message is delivered via a $250 vest over a $120 merino sweater, with $300 dark denim, clean white sneakers, and an Apple Watch that costs more than your rent.
+      </p>
+      <p class="species-desc">
+        The beautiful irony of this aesthetic is that it is the most self-aware performance on this list. The Tech Bro knows he's doing it. He just believes that knowing about it excuses him from it. It does not.
+      </p>
+      <div class="giveaway-list">
+        <div class="giveaway-label">Instant giveaways</div>
+        <ul>
+          <li>Will mention "we're focused on outcomes" within 3 minutes of any conversation</li>
+          <li>Patagonia vest has a company logo embroidered on the chest. The company is his.</li>
+          <li>Calls wearing a suit "a cosplay for people who need to signal status"</li>
+          <li>The Apple Watch is set to display his resting heart rate at all times</li>
+          <li>Has one pair of jeans. They cost $280. They are described as "simple."</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="comic-box reveal">
+    <div class="cb-label">Field Observation</div>
+    The ultimate tell: the wealthier the man, the more deliberately "not trying" his outfit looks. A hedge fund manager in a Carhartt jacket is performing class inversion — he is so rich he can afford to dress like he isn't. This is a power move so sophisticated it has looped back around to being sincere, which means it's now being imitated by people who aren't rich, making it a performance again. Fashion is a loop and everyone loses.
+  </div>
+
+  <div class="photo-full reveal">
+    <img src="../images/articles/03-performative-male/hype-beast.jpg" alt="The Hype Beast — streetwear editorial">
+    <p class="photo-caption">The hype beast's natural habitat: anywhere with good lighting and a lens nearby.</p>
+  </div>
+
+  <!-- Species 4 -->
+  <div class="species-card reveal" id="species-4">
+    <div class="species-img" style="background:#c4bdb5;">
+      <img src="../images/articles/03-performative-male/hype-beast.jpg" alt="The Hype Beast">
+      <div class="species-badge">Species 04</div>
+      <div class="danger-badge">⚠️ Threat: Significant</div>
+    </div>
+    <div class="species-body">
+      <div class="species-name">The Hype Beast</div>
+      <div class="species-subtitle">Also known as: The Box Logo, The Tuesday Drop Guy, The One Who Knows Which Jordan Is Worth What</div>
+      <div class="species-stats">
+        <div class="stat-cell"><span class="stat-label">Habitat</span><span class="stat-val">Supreme queues, StockX app, sneaker convention floors</span></div>
+        <div class="stat-cell"><span class="stat-label">Signature item</span><span class="stat-val">Limited-release sneaker, never worn</span></div>
+        <div class="stat-cell"><span class="stat-label">Core philosophy</span><span class="stat-val">Own the rare thing. Be seen owning it.</span></div>
+      </div>
+      <p class="species-desc">
+        The Hype Beast has solved fashion by turning it into an investment thesis. He does not wear clothing. He <em>holds positions</em> in clothing. The sneakers are not for wearing — they are for photographing, listing on StockX, watching appreciate, and never, under any circumstances, actually putting on your feet.
+      </p>
+      <p class="species-desc">
+        The box logo Supreme hoodie is not a hoodie. It is a statement about cultural access — specifically, that he knew about the drop before you did, queued before you would have, and owns a thing you cannot easily obtain. The logo is the whole point. The garment underneath the logo is irrelevant to the enterprise.
+      </p>
+      <div class="giveaway-list">
+        <div class="giveaway-label">Instant giveaways</div>
+        <ul>
+          <li>Sneakers have original box, original receipt, tissue paper undisturbed</li>
+          <li>Will tell you the resale value of his outfit before you ask</li>
+          <li>Has an opinion on every colourway of a shoe he has never worn</li>
+          <li>The fit is secondary to the items. The items are always primary.</li>
+          <li>Follows 34 sneaker news accounts. Zero style accounts.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Species 5 -->
+  <div class="species-card reveal" id="species-5">
+    <div class="species-img" style="background:#d0c8bc;">
+      <img src="../images/articles/03-performative-male/gym-bro.jpg" alt="The Optimisation Gym Bro">
+      <div class="species-badge">Species 05</div>
+      <div class="danger-badge">⚠️ Threat: Significant</div>
+    </div>
+    <div class="species-body">
+      <div class="species-name">The Optimisation Gym Bro</div>
+      <div class="species-subtitle">Also known as: The Protein Shake Aesthetic, The Compression Shorts That Cost More Than Your Rent Guy</div>
+      <div class="species-stats">
+        <div class="stat-cell"><span class="stat-label">Habitat</span><span class="stat-val">Gym floor, grocery stores, anywhere he can be shirtless</span></div>
+        <div class="stat-cell"><span class="stat-label">Signature item</span><span class="stat-val">Gymshark or Lululemon everything</span></div>
+        <div class="stat-cell"><span class="stat-label">Hydration vessel</span><span class="stat-val">1-gallon jug with time markers</span></div>
+      </div>
+      <p class="species-desc">
+        The Gym Bro's performance is the most physically demanding of all the species — he has actually committed to the bit. The body is the canvas. The compression wear (Gymshark, Lululemon, maybe a single Under Armour item he's slightly embarrassed about) is the frame. The protein shaker is the accessory.
+      </p>
+      <p class="species-desc">
+        What is being performed here is <em>discipline</em>. The signal is: I wake up before you, I track things you don't track, I have turned my body into a project and I am managing it with the focus of someone who could be running a small company. The ABC trousers and the quarter-zip are his business casual. The gym wear is his evening wear. The tracksuit is his weekend wear. He has achieved a complete mono-wardrobe, which is, in a strange way, the most minimalist outcome on this list.
+      </p>
+      <div class="giveaway-list">
+        <div class="giveaway-label">Instant giveaways</div>
+        <ul>
+          <li>Can tell you his body fat percentage to one decimal place, unprompted</li>
+          <li>The 1-gallon water jug has motivational text printed on the side</li>
+          <li>Wears compression shorts to the supermarket "because they're comfortable"</li>
+          <li>Has a protein powder for every hour of the day, apparently</li>
+          <li>His Lululemon ABC trousers are genuinely the best trousers anyone owns</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider reveal"><span>🌍</span></div>
+
+  <!-- Species 6 -->
+  <div class="species-card reveal" id="species-6">
+    <div class="species-img" style="background:#d8cfc4;">
+      <img src="../images/articles/03-performative-male/gorpcore.jpg" alt="The Wanderer">
+      <div class="species-badge">Species 06</div>
+      <div class="danger-badge" style="background:rgba(190,18,60,0.7);">🚨 Threat: High</div>
+    </div>
+    <div class="species-body">
+      <div class="species-name">The Wanderer</div>
+      <div class="species-subtitle">Also known as: The "I Just Got Back" Guy, The Permanent Gap Year, The Linen Situation</div>
+      <div class="species-stats">
+        <div class="stat-cell"><span class="stat-label">Habitat</span><span class="stat-val">Farmers' markets, specialty coffee, "hidden" rooftop bars</span></div>
+        <div class="stat-cell"><span class="stat-label">Signature item</span><span class="stat-val">Linen shirt, deliberately wrinkled</span></div>
+        <div class="stat-cell"><span class="stat-label">Origin story</span><span class="stat-val">Unknown, possibly never explained</span></div>
+      </div>
+      <p class="species-desc">
+        The Wanderer is rated most dangerous on this list not because of anything he does, but because of what he <em>implies</em>. The look — loose linen shirt (wrinkled just enough), worn leather sandals, small weathered rucksack, faded canvas tote with the logo of a market from a city he mentions frequently — implies a life of movement, experience, and non-institutional freedom.
+      </p>
+      <p class="species-desc">
+        You never ask a Wanderer where he just got back from. The look only works as implication. The moment he has to produce an actual location, the spell breaks. He is "between projects." He knows a place in Lisbon. He has strong opinions about Hanoi's coffee culture that he will share without prompting. The linen shirt was purchased in a market two weeks ago and has been machine-washed twelve times to achieve this specific level of distressed casualness.
+      </p>
+      <p class="species-desc">
+        The threat level is high because this is the only performance on this list that directly implies the wearer has found something the rest of us are missing. Every other performative male is showing off a <em>thing</em>. The Wanderer is showing off an entire alternative way of being alive.
+      </p>
+      <div class="giveaway-list">
+        <div class="giveaway-label">Instant giveaways</div>
+        <ul>
+          <li>Cannot name a specific hotel, airline, or dates when asked about "the trip"</li>
+          <li>The leather sandals were bought on ASOS and treated with a weathering kit</li>
+          <li>Has a "favourite" city for every category of activity, none of which is his home city</li>
+          <li>Uses the phrase "it's all about slowing down" while ordering a double espresso</li>
+          <li>The rucksack contains a laptop, cables, and three chargers. No passport.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="pull-quote reveal">
+    <blockquote>
+      "The most self-conscious aesthetic is the one that claims to have no aesthetic. Authenticity is not free — it is the most expensive performance on the menu."
+    </blockquote>
+    <cite>— Clozet, March 2026</cite>
+  </div>
+
+  <!-- Conclusion -->
+  <div class="section-divider reveal"><span>✦</span></div>
+
+  <h2 style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(22px,3vw,30px);font-weight:700;letter-spacing:-0.01em;margin-bottom:18px;">So What Do We Do With All This?</h2>
+  <p class="body-para">
+    Here is the thing I genuinely believe, after thinking about this far longer than is reasonable: there is nothing wrong with dressing performatively. Every single human being who has ever made a deliberate choice about what to wear has performed something. The question is just whether you're performing intentionally or by accident — and whether the thing you're performing is actually true.
+  </p>
+  <p class="body-para">
+    The Gorpcore Guy who has genuinely hiked every weekend for ten years has earned those Salomons. The Soft Male who actually read the book and actually changed the way he thinks about the world can carry the tote with no irony. The Gym Bro who loves training and is not doing it for anyone but himself has the most functional wardrobe of anyone on this list. The Wanderer who actually moves, actually stays, actually goes back — that linen shirt means something.
+  </p>
+  <p class="body-para">
+    The performativity isn't the crime. The crime is wearing the costume without doing the homework. Fashion that lies is the only kind that has ever looked truly bad.
+  </p>
+  <p class="body-para" style="font-style:italic;color:var(--ink-40);">
+    Which species are you? (Don't answer that. We both already know.) Drop your honest assessment in the newsletter reply — this one always gets interesting responses.
+  </p>
+
+  <!-- More articles -->
+  <div style="margin-top:72px;">
+    <p style="font-size:11px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:var(--ink-40);margin-bottom:22px;">You Might Also Like</p>
+    <div class="more-grid reveal">
+      <a href="10-pieces.html" class="more-card">
+        <img src="../images/articles/01-10-pieces/hero.jpg" alt="10 pieces article">
+        <div class="more-card-body">
+          <div class="more-card-tag" style="color:#7c3aed;">Style Diaries</div>
+          <div class="more-card-title">The 10 Pieces I Actually Wear Every Single Week</div>
+        </div>
+      </a>
+      <a href="thrift-store-routine.html" class="more-card">
+        <img src="../images/articles/02-thrift-store/hero.jpg" alt="Thrift store article">
+        <div class="more-card-body">
+          <div class="more-card-tag" style="color:#0d9488;">Slow Fashion</div>
+          <div class="more-card-title">Second-Hand Finds: My Thrift Store Routine</div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+</article>
+
+<!-- Footer -->
+<footer>
+  <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <svg width="14" height="11" viewBox="0 0 17 14" fill="none" stroke="rgba(28,20,16,0.45)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 1C8.5 1 11 1 11 3C11 4.2 10 5 8.5 5"/><path d="M8.5 5L1 12.5H16L8.5 5Z"/></svg>
+      <span style="font-size:13px;font-weight:700;color:rgba(28,20,16,0.45);">Clozet</span>
+    </div>
+    <div style="font-size:12px;color:rgba(28,20,16,0.30);">© 2026 Clozet. All rights reserved.</div>
+    <a href="../index.html" style="font-size:13px;color:rgba(28,20,16,0.50);text-decoration:none;font-weight:500;" onmouseover="this.style.color='#1c1410'" onmouseout="this.style.color='rgba(28,20,16,0.50)'">← Back to home</a>
+  </div>
+</footer>
+
+<script>
+  window.addEventListener('scroll', () => {
+    const doc = document.documentElement;
+    const pct = doc.scrollTop / (doc.scrollHeight - doc.clientHeight);
+    document.getElementById('progress-bar').style.width = (pct * 100) + '%';
+  });
+</script>
+<script>
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -36px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>

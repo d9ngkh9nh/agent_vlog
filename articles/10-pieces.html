@@ -343,6 +343,20 @@
     ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: var(--bg); }
     ::-webkit-scrollbar-thumb { background: rgba(28,20,16,0.15); border-radius: 5px; }
+
+    /* ── Scroll animations ── */
+    .reveal {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.70s cubic-bezier(0.22,1,0.36,1), transform 0.70s cubic-bezier(0.22,1,0.36,1);
+      will-change: opacity, transform;
+    }
+    .reveal-left  { opacity: 0; transform: translateX(-32px); transition: opacity 0.70s cubic-bezier(0.22,1,0.36,1), transform 0.70s cubic-bezier(0.22,1,0.36,1); }
+    .reveal-right { opacity: 0; transform: translateX(32px);  transition: opacity 0.70s cubic-bezier(0.22,1,0.36,1), transform 0.70s cubic-bezier(0.22,1,0.36,1); }
+    .reveal.visible, .reveal-left.visible, .reveal-right.visible { opacity: 1; transform: none; }
+    .d1 { transition-delay: 0.08s; } .d2 { transition-delay: 0.16s; }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal, .reveal-left, .reveal-right { opacity: 1; transform: none; transition: none; }
+    }
   </style>
 </head>
 <body>
@@ -367,7 +381,7 @@
 
 <!-- ── Hero ── -->
 <div class="hero-wrap">
-  <img src="https://placehold.co/1400x680/1a0f2e/7c3aed?text=✦" alt="Article hero — wardrobe essentials" class="hero-img">
+  <img src="../images/articles/01-10-pieces/hero.jpg" alt="Article hero — wardrobe essentials" class="hero-img">
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <p class="hero-eyebrow">Style Diaries · Apr 1, 2026</p>
@@ -389,7 +403,7 @@
 <article class="article-body">
 
   <!-- Byline -->
-  <div class="byline">
+  <div class="byline reveal">
     <div class="byline-avatar" style="overflow:hidden;">
       <img src="https://placehold.co/44x44/ede9fe/7c3aed?text=A" alt="Alex Nguyen" style="width:44px;height:44px;object-fit:cover;">
     </div>
@@ -427,17 +441,17 @@
   </p>
 
   <!-- Pull quote -->
-  <div class="pull-quote">
+  <div class="pull-quote reveal">
     <blockquote>
       "Style isn't about having more. It's about having the perfect version of exactly what you actually need."
     </blockquote>
     <cite>— Alex Nguyen, Clozet</cite>
   </div>
 
-  <div class="section-divider"></div>
+  <div class="section-divider reveal"></div>
 
   <!-- Item 1 -->
-  <div class="item-section">
+  <div class="item-section reveal">
     <div class="item-number">01 / The Foundation</div>
     <h2 class="item-title">The Perfect White Tee</h2>
     <p class="body-para">
@@ -450,19 +464,19 @@
       workhorse of my wardrobe and the piece I'd repurchase without hesitation if it disappeared tomorrow.
     </p>
 
-    <div class="photo-full">
-      <img src="https://placehold.co/900x420/f5f0ea/b0a090?text=White+Tee+Editorial" alt="White tee styling editorial">
+    <div class="photo-full reveal">
+      <img src="../images/articles/01-10-pieces/white-tee.jpg" alt="White tee styling editorial">
       <p class="photo-caption">A perfectly weighted white tee — the kind that goes with absolutely everything.</p>
     </div>
   </div>
 
   <!-- Item 2 -->
-  <div class="item-section">
+  <div class="item-section reveal">
     <div class="item-number">02 / The Workhorse</div>
     <h2 class="item-title">High-Waisted Straight-Leg Jeans</h2>
 
-    <div class="photo-side">
-      <img src="https://placehold.co/400x530/ddd8d0/9a9088?text=Jeans+Shot" alt="High-waisted straight jeans">
+    <div class="photo-side reveal">
+      <img src="../images/articles/01-10-pieces/jeans.jpg" alt="High-waisted straight jeans">
       <div>
         <p class="body-para">
           Not skinny. Not flared. Not wide-leg. Just a clean, straight cut that hits right at the ankle and
@@ -483,7 +497,7 @@
   </div>
 
   <!-- Item 3 -->
-  <div class="item-section">
+  <div class="item-section reveal">
     <div class="item-number">03 / The Comfort Upgrade</div>
     <h2 class="item-title">A Cashmere (or Cashmere-Blend) Sweater</h2>
     <p class="body-para">
@@ -497,16 +511,16 @@
       piece that makes a good outfit feel elevated without any extra effort.
     </p>
 
-    <div class="photo-pair">
-      <img src="https://placehold.co/380x260/f0ece4/b0a890?text=Sweater+Flat+Lay" alt="Cashmere sweater flat lay" style="border-radius:14px;">
-      <img src="https://placehold.co/380x260/e8e4dc/a09888?text=Sweater+Styled" alt="Cashmere sweater styled" style="border-radius:14px;">
+    <div class="photo-pair reveal">
+      <img src="../images/articles/01-10-pieces/cashmere-1.jpg" alt="Cashmere sweater flat lay" style="border-radius:14px;">
+      <img src="../images/articles/01-10-pieces/cashmere-2.jpg" alt="Cashmere sweater styled" style="border-radius:14px;">
     </div>
   </div>
 
-  <div class="section-divider"></div>
+  <div class="section-divider reveal"></div>
 
   <!-- Item 4 -->
-  <div class="item-section">
+  <div class="item-section reveal">
     <div class="item-number">04 / The Statement Layer</div>
     <h2 class="item-title">A Tailored Blazer in Camel or Cream</h2>
     <p class="body-para">
@@ -522,12 +536,12 @@
   </div>
 
   <!-- Item 5 -->
-  <div class="item-section">
+  <div class="item-section reveal">
     <div class="item-number">05 / The Outerwear</div>
     <h2 class="item-title">A Trench Coat That Fits Like It Was Made for You</h2>
 
-    <div class="photo-full">
-      <img src="https://placehold.co/900x480/e8e0d8/988070?text=Trench+Coat+Editorial" alt="Trench coat editorial styling">
+    <div class="photo-full reveal">
+      <img src="../images/articles/01-10-pieces/trench.jpg" alt="Trench coat editorial styling">
       <p class="photo-caption">The trench coat: the only outerwear you'll ever truly need in a temperate climate.</p>
     </div>
 
@@ -544,7 +558,7 @@
   </div>
 
   <!-- Item 6 -->
-  <div class="item-section">
+  <div class="item-section reveal">
     <div class="item-number">06 / The Easy Dress</div>
     <h2 class="item-title">A Silk (or Silk-Like) Slip Dress</h2>
 
@@ -560,14 +574,14 @@
           like I spent much more time getting dressed than I actually did. The goal.
         </p>
       </div>
-      <img src="https://placehold.co/400x500/ede8e0/a09080?text=Slip+Dress+Shot" alt="Silk slip dress">
+      <img src="../images/articles/01-10-pieces/slip-dress.jpg" alt="Silk slip dress">
     </div>
   </div>
 
-  <div class="section-divider"></div>
+  <div class="section-divider reveal"></div>
 
   <!-- Items 7–10 condensed -->
-  <div class="item-section">
+  <div class="item-section reveal">
     <div class="item-number">07 — 10</div>
     <h2 class="item-title">The Final Four: Quiet but Essential</h2>
     <p class="body-para">
@@ -578,7 +592,7 @@
 
   <div class="photo-pair">
     <div style="border-radius:14px;overflow:hidden;border:1px solid rgba(28,20,16,0.07);">
-      <img src="https://placehold.co/380x220/e4e0d8/908880?text=Ankle+Boots" alt="Classic ankle boots" style="width:100%;height:220px;object-fit:cover;display:block;border-radius:0;">
+      <img src="../images/articles/01-10-pieces/boots.jpg" alt="Classic ankle boots" style="width:100%;height:220px;object-fit:cover;display:block;border-radius:0;">
       <div style="padding:14px 16px;background:#fff;">
         <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#7c3aed;margin-bottom:4px;">07</div>
         <div style="font-size:14px;font-weight:700;margin-bottom:5px;">Classic Ankle Boots</div>
@@ -587,7 +601,7 @@
     </div>
 
     <div style="border-radius:14px;overflow:hidden;border:1px solid rgba(28,20,16,0.07);">
-      <img src="https://placehold.co/380x220/dedad2/807870?text=Leather+Tote" alt="Simple leather tote" style="width:100%;height:220px;object-fit:cover;display:block;border-radius:0;">
+      <img src="../images/articles/01-10-pieces/tote.jpg" alt="Simple leather tote" style="width:100%;height:220px;object-fit:cover;display:block;border-radius:0;">
       <div style="padding:14px 16px;background:#fff;">
         <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#7c3aed;margin-bottom:4px;">08</div>
         <div style="font-size:14px;font-weight:700;margin-bottom:5px;">A Simple Leather Tote</div>
@@ -598,7 +612,7 @@
 
   <div class="photo-pair" style="margin-top:14px;">
     <div style="border-radius:14px;overflow:hidden;border:1px solid rgba(28,20,16,0.07);">
-      <img src="https://placehold.co/380x220/e8e4dc/989080?text=Linen+Shirt" alt="Striped linen shirt" style="width:100%;height:220px;object-fit:cover;display:block;border-radius:0;">
+      <img src="../images/articles/01-10-pieces/linen-shirt.jpg" alt="Striped linen shirt" style="width:100%;height:220px;object-fit:cover;display:block;border-radius:0;">
       <div style="padding:14px 16px;background:#fff;">
         <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#7c3aed;margin-bottom:4px;">09</div>
         <div style="font-size:14px;font-weight:700;margin-bottom:5px;">A Striped Linen Shirt</div>
@@ -607,7 +621,7 @@
     </div>
 
     <div style="border-radius:14px;overflow:hidden;border:1px solid rgba(28,20,16,0.07);">
-      <img src="https://placehold.co/380x220/d8d4cc/706860?text=Wide+Leg+Trousers" alt="Black wide-leg trousers" style="width:100%;height:220px;object-fit:cover;display:block;border-radius:0;">
+      <img src="../images/articles/01-10-pieces/wide-trousers.jpg" alt="Black wide-leg trousers" style="width:100%;height:220px;object-fit:cover;display:block;border-radius:0;">
       <div style="padding:14px 16px;background:#fff;">
         <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#7c3aed;margin-bottom:4px;">10</div>
         <div style="font-size:14px;font-weight:700;margin-bottom:5px;">Black Wide-Leg Trousers</div>
@@ -616,7 +630,7 @@
     </div>
   </div>
 
-  <div class="section-divider"></div>
+  <div class="section-divider reveal"></div>
 
   <!-- Closing -->
   <p class="body-para">
@@ -634,7 +648,7 @@
   </p>
 
   <!-- Shop the story -->
-  <div class="shop-section">
+  <div class="shop-section reveal">
     <div class="shop-eyebrow">Shop the Story</div>
     <div class="shop-grid">
       <a href="#" class="shop-item">
@@ -713,5 +727,13 @@
   </div>
 </footer>
 
+<script>
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -36px 0px' });
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => obs.observe(el));
+</script>
 </body>
 </html>

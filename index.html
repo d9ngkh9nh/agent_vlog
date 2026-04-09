@@ -254,6 +254,47 @@
     ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: #faf8f4; }
     ::-webkit-scrollbar-thumb { background: rgba(28,20,16,0.15); border-radius: 5px; }
+
+    /* ── Scroll animations ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.70s cubic-bezier(0.22,1,0.36,1),
+                  transform 0.70s cubic-bezier(0.22,1,0.36,1);
+      will-change: opacity, transform;
+    }
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-36px);
+      transition: opacity 0.72s cubic-bezier(0.22,1,0.36,1),
+                  transform 0.72s cubic-bezier(0.22,1,0.36,1);
+    }
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(36px);
+      transition: opacity 0.72s cubic-bezier(0.22,1,0.36,1),
+                  transform 0.72s cubic-bezier(0.22,1,0.36,1);
+    }
+    .reveal-scale {
+      opacity: 0;
+      transform: scale(0.92) translateY(14px);
+      transition: opacity 0.55s ease,
+                  transform 0.55s cubic-bezier(0.22,1,0.36,1);
+    }
+    .reveal.visible, .reveal-left.visible, .reveal-right.visible, .reveal-scale.visible {
+      opacity: 1;
+      transform: none;
+    }
+    .d1 { transition-delay: 0.07s; }
+    .d2 { transition-delay: 0.14s; }
+    .d3 { transition-delay: 0.21s; }
+    .d4 { transition-delay: 0.28s; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal, .reveal-left, .reveal-right, .reveal-scale {
+        opacity: 1; transform: none; transition: none;
+      }
+    }
   </style>
 </head>
 <body>
@@ -359,14 +400,14 @@
       </div>
 
       <!-- Stats strip -->
-      <div id="hero-stats" style="display:flex;align-items:center;gap:28px;margin-top:52px;padding-top:28px;border-top:1px solid rgba(28,20,16,0.09);flex-wrap:wrap;">
+      <div id="hero-stats" class="reveal" style="display:flex;align-items:center;gap:28px;margin-top:52px;padding-top:28px;border-top:1px solid rgba(28,20,16,0.09);flex-wrap:wrap;">
         <div>
-          <div style="font-size:22px;font-weight:800;letter-spacing:-0.03em;">48+</div>
+          <div id="stat-articles" data-target="48" data-suffix="+" style="font-size:22px;font-weight:800;letter-spacing:-0.03em;">48+</div>
           <div style="font-size:11px;color:rgba(28,20,16,0.42);margin-top:2px;font-weight:500;">Articles</div>
         </div>
         <div style="width:1px;height:28px;background:rgba(28,20,16,0.1);"></div>
         <div>
-          <div style="font-size:22px;font-weight:800;letter-spacing:-0.03em;">2.4k</div>
+          <div id="stat-subs" data-target="2.4" data-suffix="k" data-decimals="1" style="font-size:22px;font-weight:800;letter-spacing:-0.03em;">2.4k</div>
           <div style="font-size:11px;color:rgba(28,20,16,0.42);margin-top:2px;font-weight:500;">Subscribers</div>
         </div>
         <div style="width:1px;height:28px;background:rgba(28,20,16,0.1);"></div>
@@ -383,7 +424,7 @@
       <!-- Card 1: large, top-right, image -->
       <div class="glass float-a" style="position:absolute;top:0;right:0;width:300px;border-radius:20px;overflow:hidden;cursor:pointer;" onclick="location.href='articles/10-pieces.html'">
         <div style="overflow:hidden;height:150px;">
-          <img src="https://placehold.co/300x150/ede9fe/7c3aed?text=✦" alt="" style="width:100%;height:100%;object-fit:cover;display:block;">
+          <img src="images/articles/01-10-pieces/fabric.jpg" alt="" style="width:100%;height:100%;object-fit:cover;display:block;">
         </div>
         <div style="padding:16px 18px;">
           <span style="font-size:10px;font-weight:700;color:#7c3aed;letter-spacing:.08em;text-transform:uppercase;">Style Diaries</span>
@@ -424,7 +465,7 @@
 <section id="posts" style="padding:96px 24px;max-width:1200px;margin:0 auto;">
 
   <!-- Section header -->
-  <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:44px;flex-wrap:wrap;gap:16px;">
+  <div class="reveal" style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:44px;flex-wrap:wrap;gap:16px;">
     <div>
       <div style="font-size:11px;font-weight:700;color:#7c3aed;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;">Latest Articles</div>
       <h2 style="font-size:clamp(26px,3.5vw,38px);font-weight:800;letter-spacing:-0.025em;line-height:1.1;">Fresh from the Closet</h2>
@@ -439,9 +480,9 @@
   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px;">
 
     <!-- Post 1 -->
-    <article class="glass post-card" tabindex="0" onclick="location.href='articles/10-pieces.html'" style="cursor:pointer;" role="link" aria-label="Read: The 10 Pieces I Actually Wear Every Single Week">
+    <article class="glass post-card reveal d1" tabindex="0" onclick="location.href='articles/10-pieces.html'" style="cursor:pointer;" role="link" aria-label="Read: The 10 Pieces I Actually Wear Every Single Week">
       <div style="overflow:hidden;height:196px;">
-        <img src="https://placehold.co/640x196/ede9fe/7c3aed?text=✦" alt="Capsule wardrobe article" class="thumb">
+        <img src="images/articles/01-10-pieces/hero.jpg" alt="Capsule wardrobe article" class="thumb">
       </div>
       <div style="padding:20px;">
         <span style="font-size:10px;font-weight:700;color:#7c3aed;letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:10px;">Style Diaries</span>
@@ -455,9 +496,9 @@
     </article>
 
     <!-- Post 2 -->
-    <article class="glass post-card" tabindex="0" onclick="location.href='articles/thrift-store-routine.html'" style="cursor:pointer;" role="link" aria-label="Read: Second-Hand Finds: My Thrift Store Routine">
+    <article class="glass post-card reveal d2" tabindex="0" onclick="location.href='articles/thrift-store-routine.html'" style="cursor:pointer;" role="link" aria-label="Read: Second-Hand Finds: My Thrift Store Routine">
       <div style="overflow:hidden;height:196px;">
-        <img src="https://placehold.co/640x196/ccfbf1/0d9488?text=✦" alt="Thrift store routine article" class="thumb">
+        <img src="images/articles/02-thrift-store/hero.jpg" alt="Thrift store routine article" class="thumb">
       </div>
       <div style="padding:20px;">
         <span style="font-size:10px;font-weight:700;color:#0d9488;letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:10px;">Slow Fashion</span>
@@ -471,9 +512,9 @@
     </article>
 
     <!-- Post 3 -->
-    <article class="glass post-card" tabindex="0">
+    <article class="glass post-card reveal d3" tabindex="0" onclick="location.href='articles/performative-male.html'" style="cursor:pointer;" role="link" aria-label="Read: The Performative Male: A Field Guide">
       <div style="overflow:hidden;height:196px;">
-        <img src="https://placehold.co/640x196/fef3c7/b45309?text=✦" alt="30-day outfit review article" class="thumb">
+        <img src="images/articles/03-performative-male/hero.jpg" alt="30-day outfit review article" class="thumb">
       </div>
       <div style="padding:20px;">
         <span style="font-size:10px;font-weight:700;color:#b45309;letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:10px;">Outfit Reviews</span>
@@ -494,35 +535,35 @@
 <!-- ═══════════════════════════════════ TOPICS ══════════════════════════════════ -->
 <section id="topics" style="padding:96px 24px;max-width:1200px;margin:0 auto;">
 
-  <div style="text-align:center;margin-bottom:52px;">
+  <div class="reveal" style="text-align:center;margin-bottom:52px;">
     <div style="font-size:11px;font-weight:700;color:#7c3aed;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;">Explore by Topic</div>
     <h2 style="font-size:clamp(26px,3.5vw,38px);font-weight:800;letter-spacing:-0.025em;">What's in the Closet</h2>
   </div>
 
   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;">
 
-    <div class="glass topic-card" style="padding:26px;" tabindex="0">
+    <div class="glass topic-card reveal d1" style="padding:26px;" tabindex="0">
       <div style="font-size:26px;margin-bottom:14px;">👗</div>
       <div style="font-size:15px;font-weight:700;letter-spacing:-0.01em;margin-bottom:6px;">Style Diaries</div>
       <div style="font-size:13px;color:rgba(28,20,16,0.48);line-height:1.55;margin-bottom:14px;">Day-to-day looks and outfit breakdowns</div>
       <div style="font-size:11px;font-weight:600;color:rgba(109,40,217,0.75);">18 articles →</div>
     </div>
 
-    <div class="glass topic-card" style="padding:26px;" tabindex="0">
+    <div class="glass topic-card reveal d2" style="padding:26px;" tabindex="0">
       <div style="font-size:26px;margin-bottom:14px;">♻️</div>
       <div style="font-size:15px;font-weight:700;letter-spacing:-0.01em;margin-bottom:6px;">Slow Fashion</div>
       <div style="font-size:13px;color:rgba(28,20,16,0.48);line-height:1.55;margin-bottom:14px;">Ethical choices and sustainable brands</div>
       <div style="font-size:11px;font-weight:600;color:rgba(13,148,136,0.85);">14 articles →</div>
     </div>
 
-    <div class="glass topic-card" style="padding:26px;" tabindex="0">
+    <div class="glass topic-card reveal d3" style="padding:26px;" tabindex="0">
       <div style="font-size:26px;margin-bottom:14px;">👜</div>
       <div style="font-size:15px;font-weight:700;letter-spacing:-0.01em;margin-bottom:6px;">Capsule Wardrobe</div>
       <div style="font-size:13px;color:rgba(28,20,16,0.48);line-height:1.55;margin-bottom:14px;">Minimalist dressing, maximum impact</div>
       <div style="font-size:11px;font-weight:600;color:rgba(180,83,9,0.85);">11 articles →</div>
     </div>
 
-    <div class="glass topic-card" style="padding:26px;" tabindex="0">
+    <div class="glass topic-card reveal d4" style="padding:26px;" tabindex="0">
       <div style="font-size:26px;margin-bottom:14px;">⭐</div>
       <div style="font-size:15px;font-weight:700;letter-spacing:-0.01em;margin-bottom:6px;">Outfit Reviews</div>
       <div style="font-size:13px;color:rgba(28,20,16,0.48);line-height:1.55;margin-bottom:14px;">Honest takes and monthly round-ups</div>
@@ -539,9 +580,9 @@
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;" class="about-grid">
 
     <!-- Photo -->
-    <div style="position:relative;">
+    <div class="reveal-left" style="position:relative;">
       <div class="glass" style="border-radius:24px;overflow:hidden;">
-        <img src="https://placehold.co/560x460/ede9fe/7c3aed?text=✦" alt="Author photo" style="width:100%;height:420px;object-fit:cover;display:block;">
+        <img src="images/articles/01-10-pieces/slip-dress.jpg" alt="Author photo" style="width:100%;height:420px;object-fit:cover;display:block;">
       </div>
       <!-- Floating stat badge -->
       <div class="glass float-a about-badge" style="position:absolute;bottom:-18px;right:-14px;border-radius:16px;padding:14px 20px;">
@@ -551,7 +592,7 @@
     </div>
 
     <!-- Text -->
-    <div>
+    <div class="reveal-right">
       <div style="font-size:11px;font-weight:700;color:#7c3aed;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;">About Me</div>
       <h2 style="font-size:clamp(26px,3.5vw,40px);font-weight:800;letter-spacing:-0.03em;line-height:1.12;margin-bottom:20px;">The person behind<br>the wardrobe.</h2>
       <p style="font-size:15px;color:rgba(28,20,16,0.52);line-height:1.82;margin-bottom:16px;">
@@ -570,7 +611,7 @@
 
 <!-- ══════════════════════════════════ NEWSLETTER ═════════════════════════════════ -->
 <section id="newsletter" style="padding:96px 24px;max-width:1200px;margin:0 auto;">
-  <div class="mesh glass" style="border-radius:28px;position:relative;overflow:hidden;">
+  <div class="mesh glass reveal" style="border-radius:28px;position:relative;overflow:hidden;">
     <div style="position:relative;z-index:2;text-align:center;">
       <div id="nl-inner" style="padding:72px 48px;">
         <div style="font-size:11px;font-weight:700;color:#7c3aed;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;">Newsletter</div>
@@ -626,5 +667,48 @@
   </div>
 </footer>
 
+<script>
+  /* ── Intersection Observer for scroll animations ── */
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        revealObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.10, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale')
+    .forEach(el => revealObserver.observe(el));
+
+  /* ── Stat counter animation ── */
+  const stats = [
+    { selector: '#stat-articles', target: 48, suffix: '+' },
+    { selector: '#stat-subs',     target: 2.4, suffix: 'k', decimals: 1 },
+  ];
+
+  const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const el = e.target;
+      const target = parseFloat(el.dataset.target);
+      const suffix = el.dataset.suffix || '';
+      const decimals = parseInt(el.dataset.decimals || '0');
+      const duration = 1200;
+      const start = performance.now();
+      function tick(now) {
+        const p = Math.min((now - start) / duration, 1);
+        const ease = 1 - Math.pow(1 - p, 3);
+        const val = (target * ease).toFixed(decimals);
+        el.textContent = val + suffix;
+        if (p < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+      counterObserver.unobserve(el);
+    });
+  }, { threshold: 0.5 });
+
+  document.querySelectorAll('[data-target]').forEach(el => counterObserver.observe(el));
+</script>
 </body>
 </html>
