@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Color Alchemist — Clozet</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital@0,1&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #faf8f4;
+      color: #1c1410;
+      -webkit-font-smoothing: antialiased;
+      overflow: hidden; /* full viewport tool */
+    }
+
+    /* Nav */
+    .glass-nav {
+      background: rgba(250,248,244,0.90);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid rgba(28,20,16,0.08);
+    }
+    .glass {
+      background: rgba(255,255,255,0.65);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(28,20,16,0.08);
+    }
+    .nav-link {
+      color: rgba(28,20,16,0.52); font-size: 14px; font-weight: 400;
+      text-decoration: none; transition: color 0.18s;
+    }
+    .nav-link:hover { color: #1c1410; }
+    .nav-link.active { color: #1c1410; font-weight: 600; }
+
+    /* ── Tool Layout ── */
+    .tool-wrap {
+      display: flex;
+      height: calc(100vh - 64px);
+    }
+
+    /* Left panel — selectors */
+    .left-panel {
+      width: 340px;
+      flex-shrink: 0;
+      border-right: 1px solid rgba(28,20,16,0.08);
+      overflow-y: auto;
+      padding: 36px 32px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .left-panel::-webkit-scrollbar { width: 3px; }
+    .left-panel::-webkit-scrollbar-thumb { background: rgba(28,20,16,0.12); border-radius: 3px; }
+
+    /* Right panel — result */
+    .right-panel {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 56px 64px;
+      background: rgba(28,20,16,0.012);
+      position: relative;
+    }
+
+    /* Section header */
+    .section-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(28,20,16,0.34);
+      margin-top: 28px;
+      margin-bottom: 13px;
+    }
+
+    /* ── Anchor color circles ── */
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px 6px;
+    }
+    .swatch-btn {
+      display: flex; flex-direction: column; align-items: center; gap: 5px;
+      background: none; border: none; cursor: pointer; padding: 4px 2px;
+    }
+    .swatch-circle {
+      width: 34px; height: 34px; border-radius: 50%;
+      outline: 3px solid transparent;
+      outline-offset: 3px;
+      transition: outline-color 0.18s, transform 0.15s;
+    }
+    .swatch-btn:hover .swatch-circle { transform: scale(1.08); }
+    .swatch-btn.sel .swatch-circle { outline-color: #1c1410; }
+    .swatch-label {
+      font-size: 9px; color: rgba(28,20,16,0.40); font-weight: 400;
+      transition: color 0.15s; letter-spacing: 0.01em;
+    }
+    .swatch-btn.sel .swatch-label { color: #1c1410; font-weight: 700; }
+
+    /* ── Pill buttons (occasion, formalness) ── */
+    .pills { display: flex; flex-wrap: wrap; gap: 6px; }
+    .pill {
+      padding: 5px 13px;
+      border-radius: 5px;
+      border: 1px solid rgba(28,20,16,0.20);
+      background: transparent;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px; font-weight: 400;
+      color: rgba(28,20,16,0.52);
+      cursor: pointer;
+      transition: background 0.16s, border-color 0.16s, color 0.16s;
+    }
+    .pill:hover { border-color: rgba(28,20,16,0.40); color: #1c1410; }
+    .pill.sel { background: #1c1410; border-color: #1c1410; color: #faf8f4; font-weight: 600; }
+
+    /* ── List options (time, elements) ── */
+    .list-row {
+      display: flex; align-items: center; gap: 8px;
+      padding: 4px 0; cursor: pointer;
+      font-size: 13px; color: rgba(28,20,16,0.40);
+      transition: color 0.15s; user-select: none;
+    }
+    .list-row:hover { color: rgba(28,20,16,0.75); }
+    .list-row.sel { color: #1c1410; }
+    .dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: transparent; flex-shrink: 0;
+      transition: background 0.15s;
+    }
+    .list-row.sel .dot { background: #1c1410; }
+
+    /* ── Temperature inline ── */
+    .temps { display: flex; gap: 14px; }
+    .temp-opt {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.13em; text-transform: uppercase;
+      color: rgba(28,20,16,0.30);
+      cursor: pointer; padding-bottom: 3px;
+      border-bottom: 2px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
+      user-select: none;
+    }
+    .temp-opt:hover { color: rgba(28,20,16,0.60); }
+    .temp-opt.sel { color: #1c1410; border-bottom-color: #1c1410; }
+
+    /* ── Generate button ── */
+    .gen-btn {
+      width: 100%; margin-top: 28px;
+      padding: 14px 20px;
+      background: #1c1410; color: #faf8f4;
+      font-family: 'Inter', sans-serif;
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      border: none; border-radius: 6px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      transition: background 0.18s, transform 0.12s;
+    }
+    .gen-btn:hover { background: #2e2218; }
+    .gen-btn:active { transform: scale(0.98); }
+
+    /* ── Empty state ── */
+    #empty-state {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 18px; text-align: center;
+    }
+    .empty-hanger { color: rgba(28,20,16,0.14); }
+    .empty-text {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: rgba(28,20,16,0.26);
+    }
+
+    /* ── Palette result ── */
+    #palette-result {
+      display: none;
+      flex-direction: column;
+      width: 100%; max-width: 660px;
+      gap: 36px;
+      animation: fadeUp 0.38s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    #palette-result.visible { display: flex; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .result-name {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: rgba(28,20,16,0.38); margin-bottom: 10px;
+    }
+    .result-desc {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-size: clamp(17px, 2vw, 24px);
+      line-height: 1.58;
+      color: rgba(28,20,16,0.72);
+    }
+
+    /* Swatches */
+    .swatches-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-radius: 14px;
+      overflow: hidden;
+      height: 200px;
+      gap: 2px;
+    }
+    .swatch-block {
+      position: relative;
+      height: 100%;
+    }
+    .swatch-fill {
+      position: absolute; inset: 0;
+    }
+    .swatch-meta {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 10px 14px 12px;
+    }
+    .swatch-meta-dark { background: linear-gradient(to top, rgba(0,0,0,0.35) 0%, transparent 100%); }
+    .swatch-meta-light { background: linear-gradient(to top, rgba(255,255,255,0.60) 0%, transparent 100%); }
+    .swatch-cname {
+      display: block; font-size: 11px; font-weight: 600;
+    }
+    .swatch-chex {
+      display: block; font-size: 10px; font-family: 'Courier New', monospace;
+      margin-top: 1px; opacity: 0.7;
+    }
+    .dark-text .swatch-cname, .dark-text .swatch-chex { color: rgba(28,20,16,0.80); }
+    .light-text .swatch-cname, .light-text .swatch-chex { color: rgba(255,255,255,0.92); }
+
+    /* Context breadcrumb */
+    .context-bar {
+      display: flex; align-items: center; flex-wrap: wrap; gap: 6px;
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase;
+    }
+    .ctx-label { color: rgba(28,20,16,0.30); }
+    .ctx-slash { color: rgba(28,20,16,0.18); }
+    .ctx-val { color: rgba(28,20,16,0.50); }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      body { overflow: auto; }
+      .tool-wrap { flex-direction: column; height: auto; }
+      .left-panel { width: 100%; border-right: none; border-bottom: 1px solid rgba(28,20,16,0.08); }
+      .right-panel { min-height: 440px; padding: 40px 28px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Nav ── -->
+<header class="glass-nav" style="position:sticky;top:0;z-index:50;">
+  <div style="max-width:none;width:100%;padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;">
+
+    <a href="index.html" style="text-decoration:none;display:flex;align-items:center;">
+      <div class="glass" style="border-radius:10px;padding:7px 14px;display:flex;align-items:center;gap:9px;">
+        <svg width="17" height="14" viewBox="0 0 17 14" fill="none" stroke="#1c1410" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M8.5 1C8.5 1 11 1 11 3C11 4.2 10 5 8.5 5"/>
+          <path d="M8.5 5L1 12.5H16L8.5 5Z"/>
+        </svg>
+        <span style="font-size:15px;font-weight:700;letter-spacing:-0.015em;color:#1c1410;">Clozet</span>
+      </div>
+    </a>
+
+    <nav style="display:flex;align-items:center;gap:30px;">
+      <a href="index.html#posts"       class="nav-link">Articles</a>
+      <a href="index.html#topics"      class="nav-link">Topics</a>
+      <a href="color-alchemist.html"   class="nav-link active">Palette</a>
+      <a href="index.html#about"       class="nav-link">About</a>
+      <a href="index.html#newsletter"  class="nav-link">Newsletter</a>
+    </nav>
+
+    <div style="width:120px;"></div><!-- balance -->
+  </div>
+</header>
+
+
+<!-- ── Tool ── -->
+<div class="tool-wrap">
+
+  <!-- ════ LEFT PANEL ════ -->
+  <div class="left-panel">
+
+    <!-- Title -->
+    <div>
+      <h1 style="font-size:21px;font-weight:800;letter-spacing:-0.025em;margin-bottom:7px;">Color Alchemist</h1>
+      <p style="font-size:10px;font-weight:600;letter-spacing:0.10em;text-transform:uppercase;color:rgba(28,20,16,0.34);line-height:1.6;">Set your context.<br>We'll curate the palette.</p>
+    </div>
+
+    <!-- 1. Anchor Color -->
+    <div class="section-label">1. Anchor Color</div>
+    <div class="color-grid" id="color-grid"></div>
+
+    <!-- 2. Occasion -->
+    <div class="section-label">2. The Occasion</div>
+    <div class="pills" id="occasion-pills"></div>
+
+    <!-- 3 + 4: Time & Elements -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 20px;">
+      <div>
+        <div class="section-label">3. Time</div>
+        <div id="time-list"></div>
+      </div>
+      <div>
+        <div class="section-label">4. Elements</div>
+        <div id="elements-list"></div>
+      </div>
+    </div>
+
+    <!-- 5. Temperature -->
+    <div class="section-label">5. Temperature</div>
+    <div class="temps" id="temp-list"></div>
+
+    <!-- 6. Formalness -->
+    <div class="section-label">6. Formalness</div>
+    <div class="pills" id="formal-pills"></div>
+
+    <!-- Divider -->
+    <div style="height:1px;background:rgba(28,20,16,0.08);margin:28px 0 0;"></div>
+
+    <!-- Generate -->
+    <button class="gen-btn" id="gen-btn" onclick="generate()">
+      Generate Look
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+    </button>
+
+  </div><!-- /left-panel -->
+
+
+  <!-- ════ RIGHT PANEL ════ -->
+  <div class="right-panel" id="right-panel">
+
+    <!-- Empty state -->
+    <div id="empty-state">
+      <svg class="empty-hanger" width="72" height="60" viewBox="0 0 17 14" fill="none" stroke="currentColor" stroke-width="0.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M8.5 1C8.5 1 11 1 11 3C11 4.2 10 5 8.5 5"/>
+        <path d="M8.5 5L1 12.5H16L8.5 5Z"/>
+      </svg>
+      <div class="empty-text">Select an anchor color to begin</div>
+    </div>
+
+    <!-- Palette result (hidden until generated) -->
+    <div id="palette-result">
+      <div>
+        <div class="result-name" id="r-name"></div>
+        <div class="result-desc" id="r-desc"></div>
+      </div>
+      <div>
+        <div class="swatches-row" id="r-swatches"></div>
+      </div>
+      <div class="context-bar" id="r-context"></div>
+    </div>
+
+  </div><!-- /right-panel -->
+
+</div><!-- /tool-wrap -->
+
+
+<script>
+(function () {
+
+  // ─────────────────────────────────────────────
+  // STATIC PALETTE DATA
+  // Keyed by anchorColor → formalness → palette
+  // ─────────────────────────────────────────────
+  const PALETTES = {
+    midnight: {
+      streetwear:    { name: "Night Voltage",      desc: "An unexpected gold accent electrifies a deep foundation. Bone keeps it wearable without softening the edge.", c: [["#1b1f2d","Midnight"],["#c8b87e","Antique Gold"],["#ede8df","Bone"]] },
+      relaxed:       { name: "Quiet Depth",         desc: "Mist slate acts as a tonal bridge — keeping the depth of midnight grounded but breathable.", c: [["#1b1f2d","Midnight"],["#8097a8","Mist Slate"],["#f5f0e8","Warm Cream"]] },
+      "smart casual":{ name: "Modern Reserve",      desc: "Camel brings warmth to midnight's cool authority — a combination that reads as considered without trying too hard.", c: [["#1b1f2d","Midnight"],["#c19a6b","Sand Camel"],["#f5f0e8","Linen"]] },
+      business:      { name: "Corporate Dusk",      desc: "Tone-on-tone depth with a graphite layer. The silver mist tie or blouse finishes the palette without breaking the mood.", c: [["#1b1f2d","Midnight"],["#4a5568","Graphite"],["#ddd9d0","Silver Mist"]] },
+      formal:        { name: "Black Tie Adjacent",  desc: "Midnight as black-tie alternative. Gold details and ivory accents lift the look to occasion-worthy without a tuxedo.", c: [["#1b1f2d","Midnight"],["#c9a84c","Champagne Gold"],["#f8f6f2","Ivory"]] },
+    },
+    olive: {
+      streetwear:    { name: "Field Operative",    desc: "Rust punches through olive's muted authority. Stone grounds the combo — utilitarian cool with a colour-block edge.", c: [["#556b2f","Olive"],["#b5451b","Rust"],["#e8e0d4","Stone"]] },
+      relaxed:       { name: "Sunday Market",      desc: "Three earth tones that look like they were borrowed from a Mediterranean morning. Effortlessly relaxed.", c: [["#556b2f","Olive"],["#c19a6b","Camel"],["#f5f0e8","Cream"]] },
+      "smart casual":{ name: "Safari Edit",        desc: "Olive and navy share a military heritage and quiet authority. Ecru keeps the layering from feeling too heavy.", c: [["#556b2f","Olive"],["#1e3a5f","Navy"],["#f2ede2","Ecru"]] },
+      business:      { name: "Earthy Authority",   desc: "A warm, earth-anchored trio that signals confidence without convention. Works best in textured fabrics.", c: [["#556b2f","Olive"],["#4a3728","Espresso"],["#c19a6b","Camel"]] },
+      formal:        { name: "Botanical Gala",     desc: "Olive as a dinner anchor — unexpected, quietly dramatic, and completely memorable.", c: [["#556b2f","Olive"],["#1b1f2d","Midnight"],["#c9a84c","Gold"]] },
+    },
+    burgundy: {
+      streetwear:    { name: "Vintage Rebel",      desc: "Burgundy and midnight create a rich, low-contrast depth. Gold breaks through with just enough vintage disruption.", c: [["#7f1d1d","Burgundy"],["#1b1f2d","Midnight"],["#c8b87e","Antique Gold"]] },
+      relaxed:       { name: "Autumn Ease",         desc: "The classic autumn palette — rich, warm, and completely unstudied. Layers naturally in knitwear and trench coats.", c: [["#7f1d1d","Burgundy"],["#c19a6b","Camel"],["#f5f0e8","Cream"]] },
+      "smart casual":{ name: "Bordeaux Weekend",   desc: "Slate cools the warmth of burgundy just enough — a pairing that works from gallery openings to Sunday brunch.", c: [["#7f1d1d","Burgundy"],["#708090","Slate"],["#e8e4de","Warm Grey"]] },
+      business:      { name: "Boardroom Vintage",  desc: "A non-traditional power palette. Charcoal grounds the richness; gold adds status without showiness.", c: [["#7f1d1d","Burgundy"],["#2d3748","Charcoal"],["#c8b87e","Antique Gold"]] },
+      formal:        { name: "Dark Romanticist",   desc: "Ivory stops burgundy and midnight from merging into a single dark mass. Quietly romantic, undeniably formal.", c: [["#7f1d1d","Burgundy"],["#1b1f2d","Midnight"],["#f8f6f2","Ivory"]] },
+    },
+    cream: {
+      streetwear:    { name: "Blank Canvas",       desc: "Cream as base lets midnight and rust do the talking — a high-contrast trio that looks intentional on the street.", c: [["#faf3e0","Cream"],["#1b1f2d","Midnight"],["#b5451b","Rust"]] },
+      relaxed:       { name: "Sunday Linen",        desc: "Warm, natural, and completely at ease. A tonal range that feels like a wardrobe built organically over years.", c: [["#faf3e0","Cream"],["#c19a6b","Camel"],["#6b8a6e","Sage"]] },
+      "smart casual":{ name: "Tonal Whisper",      desc: "Cream grounds an unlikely duo of slate and olive. The result is quietly considered with real depth.", c: [["#faf3e0","Cream"],["#8097a8","Mist Slate"],["#556b2f","Olive"]] },
+      business:      { name: "Summer Office",      desc: "Navy anchors cream's lightness; lavender keeps the formality from feeling stiff. A summer boardroom staple.", c: [["#faf3e0","Cream"],["#1e3a5f","Navy"],["#c4a8d4","Soft Lavender"]] },
+      formal:        { name: "White Noise Gala",   desc: "The modern alternative to white tie. Cream and gold shimmer together; dove slate adds grounded sophistication.", c: [["#faf3e0","Cream"],["#c9a84c","Champagne Gold"],["#8097a8","Dove Slate"]] },
+    },
+    camel: {
+      streetwear:    { name: "Trench Weather",     desc: "The trench coat silhouette in colour form. Midnight gives camel a shadow; bone prevents it reading heavy.", c: [["#c19a6b","Camel"],["#1b1f2d","Midnight"],["#ede8df","Bone"]] },
+      relaxed:       { name: "Desert Morning",     desc: "Three warm neutrals borrowed from a terracotta landscape. Easy, organic, and deeply wearable in any season.", c: [["#c19a6b","Camel"],["#6b8a6e","Sage"],["#f5f0e8","Cream"]] },
+      "smart casual":{ name: "Weekender",          desc: "Olive pulls camel slightly earthy; stone keeps the whole palette grounded — works equally well in city or country.", c: [["#c19a6b","Camel"],["#556b2f","Olive"],["#e8e4de","Stone"]] },
+      business:      { name: "Sand Suit",          desc: "A classic power-neutral combo. Espresso anchors the palette; ivory lifts it without diluting authority.", c: [["#c19a6b","Camel"],["#4a3728","Espresso"],["#f8f6f2","Ivory"]] },
+      formal:        { name: "Golden Hours",       desc: "Camel catches evening light beautifully. Burgundy adds depth; gold finishes the look with quiet ceremony.", c: [["#c19a6b","Camel"],["#7f1d1d","Burgundy"],["#c9a84c","Gold"]] },
+    },
+    slate: {
+      streetwear:    { name: "Grey Area",          desc: "Rust is the unexpected voice in a monochrome conversation — one warm accent makes the whole look feel deliberate.", c: [["#8097a8","Slate"],["#1b1f2d","Midnight"],["#b5451b","Rust"]] },
+      relaxed:       { name: "Coastal Mist",       desc: "A cool, hazy palette that feels like sea air — effortless, calm, and faintly romantic in equal measure.", c: [["#8097a8","Slate"],["#c4a8d4","Lavender"],["#f5f0e8","Cream"]] },
+      "smart casual":{ name: "Nordic Edit",        desc: "Slate and olive share Scandinavian design DNA. Cream bridges the gap and keeps the palette approachable.", c: [["#8097a8","Slate"],["#f5f0e8","Cream"],["#556b2f","Olive"]] },
+      business:      { name: "City Grey",          desc: "A muted professional palette with ambition in the details. Gold accents signal intention without showiness.", c: [["#8097a8","Slate"],["#1b1f2d","Midnight"],["#c8b87e","Antique Gold"]] },
+      formal:        { name: "Dove Ceremony",      desc: "Slate takes on a new register at night. Ivory and champagne give the palette a quiet formality entirely its own.", c: [["#8097a8","Slate"],["#f8f6f2","Ivory"],["#c9a84c","Champagne"]] },
+    },
+    blush: {
+      streetwear:    { name: "Soft Power",         desc: "Blush with midnight reads as intentional contrast, not sweetness. Camel grounds the trio in warmth.", c: [["#f4c5ce","Blush"],["#1b1f2d","Midnight"],["#c19a6b","Camel"]] },
+      relaxed:       { name: "Cherry Blossom",     desc: "Three delicate tones that feel like a Sunday afternoon. Light, tonal, and genuinely restful to wear.", c: [["#f4c5ce","Blush"],["#c4a8d4","Lavender"],["#f5f0e8","Cream"]] },
+      "smart casual":{ name: "New Romantic",       desc: "Slate provides structure for blush's softness — together they make something romantic that still means business.", c: [["#f4c5ce","Blush"],["#8097a8","Slate"],["#f5f0e8","Linen"]] },
+      business:      { name: "Petal Authority",    desc: "Navy gives blush authority it doesn't naturally carry. Cream keeps the palette from reading too formal.", c: [["#f4c5ce","Blush"],["#1e3a5f","Navy"],["#f5f0e8","Cream"]] },
+      formal:        { name: "Rose Hour",          desc: "Burgundy gives blush an evening edge. Gold ties the palette into the occasion — a warm, romantic formal trio.", c: [["#f4c5ce","Blush"],["#7f1d1d","Burgundy"],["#c9a84c","Gold"]] },
+    },
+    mustard: {
+      streetwear:    { name: "Colour Block Yellow",desc: "Mustard makes a statement; midnight makes it credible. Bone is the visual breath between them.", c: [["#d4960a","Mustard"],["#1b1f2d","Midnight"],["#ede8df","Bone"]] },
+      relaxed:       { name: "Harvest Table",      desc: "Three warm autumnal tones pulled from the same countryside landscape — easy, seasonal, completely convincing.", c: [["#d4960a","Mustard"],["#556b2f","Olive"],["#c19a6b","Camel"]] },
+      "smart casual":{ name: "Ochre Intelligence", desc: "Slate is the perfect foil for mustard's warmth. Cream keeps the combination from tipping into costume.", c: [["#d4960a","Mustard"],["#8097a8","Slate"],["#f5f0e8","Cream"]] },
+      business:      { name: "Warm Ambition",      desc: "Mustard as a business anchor signals confidence. Espresso and ivory frame it in credible professionalism.", c: [["#d4960a","Mustard"],["#4a3728","Espresso"],["#f8f6f2","Ivory"]] },
+      formal:        { name: "Golden Ceremony",    desc: "The boldest formal palette in the collection. Rich, celebratory, and unapologetically warm all at once.", c: [["#d4960a","Mustard"],["#7f1d1d","Burgundy"],["#f8f6f2","Ivory"]] },
+    },
+    sage: {
+      streetwear:    { name: "Forest Edit",        desc: "Rust breaks the softness of sage with organic warmth. Bone keeps the palette balanced and wearable day-to-day.", c: [["#6b8a6e","Sage"],["#b5451b","Rust"],["#ede8df","Bone"]] },
+      relaxed:       { name: "Garden Hours",       desc: "A palette borrowed from a herb garden in bloom. Quiet, botanical, and consistently lovely to actually wear.", c: [["#6b8a6e","Sage"],["#c4a8d4","Lavender"],["#f5f0e8","Cream"]] },
+      "smart casual":{ name: "Soft Terrain",       desc: "Camel warms sage's green tones; ivory lifts the whole palette without whitening it. Remarkably versatile.", c: [["#6b8a6e","Sage"],["#c19a6b","Camel"],["#f8f6f2","Ivory"]] },
+      business:      { name: "Still Waters",       desc: "Navy grounds sage's organic quality with quiet authority. A palette for those who command a room by not trying.", c: [["#6b8a6e","Sage"],["#1e3a5f","Navy"],["#f5f0e8","Cream"]] },
+      formal:        { name: "Botanical Dusk",     desc: "Midnight and gold turn sage from garden-party into gala — a genuinely unexpected formal combination.", c: [["#6b8a6e","Sage"],["#1b1f2d","Midnight"],["#c9a84c","Gold"]] },
+    },
+    rust: {
+      streetwear:    { name: "Kiln Fire",          desc: "Rust is the warmest disruptor in a dark palette. Antique gold leans into the patina instead of fighting it.", c: [["#b5451b","Rust"],["#1b1f2d","Midnight"],["#c8b87e","Antique Gold"]] },
+      relaxed:       { name: "Terracotta Hour",    desc: "A sun-baked Mediterranean palette. Warm, timeless, and perfectly easy in cotton and linen.", c: [["#b5451b","Rust"],["#c19a6b","Camel"],["#f5f0e8","Cream"]] },
+      "smart casual":{ name: "Autumn Edit",        desc: "Olive and rust are nature's own complementary pair. Stone is the neutral that makes them wearable together.", c: [["#b5451b","Rust"],["#556b2f","Olive"],["#e8e4de","Stone"]] },
+      business:      { name: "Warm Authority",     desc: "Rust as anchor in a formal setting reads as bold but considered. Espresso and cream keep it grounded.", c: [["#b5451b","Rust"],["#4a3728","Espresso"],["#f5f0e8","Cream"]] },
+      formal:        { name: "Sunset Ceremony",    desc: "A warm tonal escalation from rust to burgundy to gold. Rich, celebratory, and unmistakably intentional.", c: [["#b5451b","Rust"],["#7f1d1d","Burgundy"],["#c9a84c","Gold"]] },
+    },
+    lavender: {
+      streetwear:    { name: "Soft Dissonance",    desc: "Midnight grounds lavender's dreaminess into something wearable. Gold adds a baroque edge that feels deliberate.", c: [["#c4a8d4","Lavender"],["#1b1f2d","Midnight"],["#c8b87e","Antique Gold"]] },
+      relaxed:       { name: "Petal Drift",        desc: "Three soft tones that live in the same quiet register. Calm, tonal, and genuinely soothing to wear.", c: [["#c4a8d4","Lavender"],["#f4c5ce","Blush"],["#f5f0e8","Cream"]] },
+      "smart casual":{ name: "Violet Intelligence",desc: "Slate and lavender sit in the same cool family but with enough tonal contrast to feel interesting, not matchy.", c: [["#c4a8d4","Lavender"],["#8097a8","Slate"],["#f5f0e8","Linen"]] },
+      business:      { name: "Amethyst Authority", desc: "Navy gives lavender the professional credibility it needs in a formal context. Ivory softens the combination.", c: [["#c4a8d4","Lavender"],["#1e3a5f","Navy"],["#f8f6f2","Ivory"]] },
+      formal:        { name: "Twilight Gala",      desc: "Lavender and burgundy create unexpected richness. Gold is the finishing detail that elevates this to occasion-ready.", c: [["#c4a8d4","Lavender"],["#7f1d1d","Burgundy"],["#c9a84c","Gold"]] },
+    },
+    navy: {
+      streetwear:    { name: "Deep Current",       desc: "Rust punches through navy's seriousness. Bone prevents the combination from becoming too heavy or too earnest.", c: [["#1e3a5f","Navy"],["#b5451b","Rust"],["#ede8df","Bone"]] },
+      relaxed:       { name: "Riviera Ease",       desc: "A French Riviera palette — navy and cream with a flash of mustard. Effortless, warm, and classically good-looking.", c: [["#1e3a5f","Navy"],["#f5f0e8","Cream"],["#d4960a","Mustard"]] },
+      "smart casual":{ name: "Harbour Blue",       desc: "Navy and slate in tonal harmony. Linen lifts the palette without diluting the nautical depth.", c: [["#1e3a5f","Navy"],["#8097a8","Slate"],["#f2ede2","Linen"]] },
+      business:      { name: "Corporate Navy",     desc: "The most trusted business palette exists for a reason. Graphite and linen keep it from becoming a uniform.", c: [["#1e3a5f","Navy"],["#4a5568","Graphite"],["#f8f6f2","Pale Linen"]] },
+      formal:        { name: "Midnight Regatta",   desc: "Navy transformed for evening. Champagne gold and ivory are the formal accessories that elevate the base.", c: [["#1e3a5f","Navy"],["#c9a84c","Champagne Gold"],["#f8f6f2","Ivory"]] },
+    },
+  };
+
+  // ─────────────────────────────────────────────
+  // SELECTOR DATA
+  // ─────────────────────────────────────────────
+  const COLORS = [
+    { id: "midnight", hex: "#1b1f2d", label: "midnight" },
+    { id: "olive",    hex: "#556b2f", label: "olive" },
+    { id: "burgundy", hex: "#7f1d1d", label: "burgundy" },
+    { id: "cream",    hex: "#f5ead5", label: "cream", border: true },
+    { id: "camel",    hex: "#c19a6b", label: "camel" },
+    { id: "slate",    hex: "#8097a8", label: "slate" },
+    { id: "blush",    hex: "#f4c5ce", label: "blush" },
+    { id: "mustard",  hex: "#d4960a", label: "mustard" },
+    { id: "sage",     hex: "#6b8a6e", label: "sage" },
+    { id: "rust",     hex: "#b5451b", label: "rust" },
+    { id: "lavender", hex: "#c4a8d4", label: "lavender" },
+    { id: "navy",     hex: "#1e3a5f", label: "navy" },
+  ];
+
+  const OCCASIONS = ["casual","office","date night","event","travel","picnic","beach","gym"];
+  const TIMES     = ["morning","afternoon","evening","night"];
+  const ELEMENTS  = ["clear","cloudy","rain","windy"];
+  const TEMPS     = ["hot","warm","cool","cold"];
+  const FORMALS   = ["streetwear","relaxed","smart casual","business","formal"];
+
+  // ─────────────────────────────────────────────
+  // STATE
+  // ─────────────────────────────────────────────
+  const state = {
+    color: null, occasion: null,
+    time: null,  elements: null,
+    temp: null,  formal: null,
+  };
+
+  // ─────────────────────────────────────────────
+  // BUILD SELECTORS
+  // ─────────────────────────────────────────────
+  function buildColorGrid() {
+    const grid = document.getElementById('color-grid');
+    COLORS.forEach(c => {
+      const btn = document.createElement('button');
+      btn.className = 'swatch-btn';
+      btn.dataset.id = c.id;
+      btn.innerHTML = `
+        <div class="swatch-circle" style="background:${c.hex};${c.border ? 'box-shadow:0 0 0 1px rgba(28,20,16,0.18) inset;' : ''}"></div>
+        <span class="swatch-label">${c.label}</span>
+      `;
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.swatch-btn').forEach(b => b.classList.remove('sel'));
+        btn.classList.add('sel');
+        state.color = c.id;
+      });
+      grid.appendChild(btn);
+    });
+  }
+
+  function buildPills(containerId, items, stateKey) {
+    const wrap = document.getElementById(containerId);
+    items.forEach(val => {
+      const btn = document.createElement('button');
+      btn.className = 'pill';
+      btn.textContent = val;
+      btn.addEventListener('click', () => {
+        wrap.querySelectorAll('.pill').forEach(b => b.classList.remove('sel'));
+        btn.classList.add('sel');
+        state[stateKey] = val;
+      });
+      wrap.appendChild(btn);
+    });
+  }
+
+  function buildList(containerId, items, stateKey) {
+    const wrap = document.getElementById(containerId);
+    items.forEach(val => {
+      const row = document.createElement('div');
+      row.className = 'list-row';
+      row.innerHTML = `<span class="dot"></span>${val}`;
+      row.addEventListener('click', () => {
+        wrap.querySelectorAll('.list-row').forEach(r => r.classList.remove('sel'));
+        row.classList.add('sel');
+        state[stateKey] = val;
+      });
+      wrap.appendChild(row);
+    });
+  }
+
+  function buildTemps() {
+    const wrap = document.getElementById('temp-list');
+    TEMPS.forEach(val => {
+      const el = document.createElement('span');
+      el.className = 'temp-opt';
+      el.textContent = val;
+      el.addEventListener('click', () => {
+        wrap.querySelectorAll('.temp-opt').forEach(e => e.classList.remove('sel'));
+        el.classList.add('sel');
+        state.temp = val;
+      });
+      wrap.appendChild(el);
+    });
+  }
+
+  buildColorGrid();
+  buildPills('occasion-pills', OCCASIONS, 'occasion');
+  buildList('time-list', TIMES, 'time');
+  buildList('elements-list', ELEMENTS, 'elements');
+  buildTemps();
+  buildPills('formal-pills', FORMALS, 'formal');
+
+  // ─────────────────────────────────────────────
+  // GENERATE
+  // ─────────────────────────────────────────────
+  function generate() {
+    if (!state.color) {
+      // Wiggle the color grid to prompt selection
+      const grid = document.getElementById('color-grid');
+      grid.style.transition = 'transform 0.08s';
+      [0, -4, 4, -3, 3, -1, 1, 0].reduce((p, x, i) =>
+        p.then(() => new Promise(r => setTimeout(() => { grid.style.transform = `translateX(${x}px)`; r(); }, 60 * i))),
+        Promise.resolve()
+      ).then(() => { grid.style.transform = ''; });
+      return;
+    }
+
+    const formalKey = state.formal || 'relaxed';
+    const palette   = PALETTES[state.color][formalKey];
+
+    renderResult(palette);
+  }
+
+  // Make global so onclick can reach it
+  window.generate = generate;
+
+  // ─────────────────────────────────────────────
+  // RENDER RESULT
+  // ─────────────────────────────────────────────
+  function isLight(hex) {
+    const r = parseInt(hex.slice(1,3),16);
+    const g = parseInt(hex.slice(3,5),16);
+    const b = parseInt(hex.slice(5,7),16);
+    return (r * 0.299 + g * 0.587 + b * 0.114) > 155;
+  }
+
+  function renderResult(palette) {
+    document.getElementById('empty-state').style.display  = 'none';
+    const result = document.getElementById('palette-result');
+    result.classList.remove('visible');
+    // Force reflow to re-trigger animation
+    void result.offsetWidth;
+    result.classList.add('visible');
+
+    document.getElementById('r-name').textContent = palette.name;
+    document.getElementById('r-desc').textContent = '\u201c' + palette.desc + '\u201d';
+
+    // Swatches
+    const swatchWrap = document.getElementById('r-swatches');
+    swatchWrap.innerHTML = '';
+    palette.c.forEach(([hex, name]) => {
+      const light = isLight(hex);
+      const item  = document.createElement('div');
+      item.className = 'swatch-block';
+      item.innerHTML = `
+        <div class="swatch-fill" style="background:${hex};"></div>
+        <div class="swatch-meta ${light ? 'swatch-meta-light' : 'swatch-meta-dark'}">
+          <span class="swatch-cname ${light ? 'dark-text' : 'light-text'}">${name}</span>
+          <span class="swatch-chex  ${light ? 'dark-text' : 'light-text'}">${hex}</span>
+        </div>
+      `;
+      swatchWrap.appendChild(item);
+    });
+
+    // Context breadcrumb
+    const parts = [
+      state.elements, state.temp, state.occasion, state.formal
+    ].filter(Boolean);
+
+    const ctx = document.getElementById('r-context');
+    ctx.innerHTML = '<span class="ctx-label">Context</span> '
+      + parts.map(p => `<span class="ctx-slash">/</span> <span class="ctx-val">${p}</span>`).join(' ');
+  }
+
+})();
+</script>
+
+</body>
+</html>
