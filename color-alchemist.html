@@ -10,12 +10,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital@0,1&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { overflow-x: hidden; }
     body {
       font-family: 'Inter', system-ui, sans-serif;
       background: #faf8f4;
       color: #1c1410;
       -webkit-font-smoothing: antialiased;
       overflow: hidden; /* full viewport tool */
+      overflow-x: hidden;
     }
 
     /* Nav */
@@ -249,20 +251,96 @@
 
     /* Mobile */
     @media (max-width: 768px) {
-      body { overflow: auto; }
+      body { overflow: auto; overflow-x: hidden; }
       .tool-wrap { flex-direction: column; height: auto; }
       .left-panel { width: 100%; border-right: none; border-bottom: 1px solid rgba(28,20,16,0.08); }
       .right-panel { min-height: 440px; padding: 40px 28px; }
+      .desktop-nav-links { display: none !important; }
+      .hamburger { display: flex !important; }
     }
+
+/* ── Hamburger (for palette page) ── */
+.hamburger {
+  display: none;
+  background: rgba(255,255,255,0.65);
+  border: 1px solid rgba(28,20,16,0.12);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border-radius: 9px; cursor: pointer;
+  width: 38px; height: 38px;
+  flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+  flex-shrink: 0;
+}
+.hamburger span {
+  display: block; width: 18px; height: 1.5px;
+  background: #1c1410; border-radius: 2px;
+  transition: transform 0.22s, opacity 0.22s;
+}
+.hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+/* ── Mobile nav overlay (palette page) ── */
+.mobile-nav {
+  display: none;
+  position: fixed; top: 64px; left: 0; right: 0; bottom: 0;
+  background: rgba(250,248,244,0.97);
+  backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  z-index: 49;
+  padding: 36px 28px 48px;
+  flex-direction: column;
+  overflow-y: auto;
+  border-top: 1px solid rgba(28,20,16,0.08);
+}
+.mobile-nav.open { display: flex; }
+.mobile-nav-link {
+  display: block; font-size: 28px; font-weight: 800;
+  letter-spacing: -0.025em; color: #1c1410;
+  text-decoration: none; padding: 18px 0;
+  border-bottom: 1px solid rgba(28,20,16,0.07);
+  transition: opacity 0.15s;
+}
+.mobile-nav-link:active { opacity: 0.4; }
+
+/* Exclude swatches (multi-select) */
+.exclude-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px 6px;
+}
+.excl-btn {
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  background: none; border: none; cursor: pointer; padding: 4px 2px;
+  position: relative;
+}
+.excl-circle {
+  width: 30px; height: 30px; border-radius: 50%;
+  outline: 2px solid transparent; outline-offset: 2px;
+  transition: outline-color 0.15s, transform 0.15s;
+  position: relative;
+}
+.excl-btn.excl .excl-circle { outline-color: #b91c1c; }
+.excl-btn.excl .excl-circle::after {
+  content: '✕';
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700;
+  color: #fff;
+  background: rgba(185,28,28,0.55);
+  border-radius: 50%;
+}
+.excl-label {
+  font-size: 9px; color: rgba(28,20,16,0.38); font-weight: 400;
+}
+.excl-btn.excl .excl-label { color: #b91c1c; font-weight: 700; }
   </style>
 </head>
 <body>
 
 <!-- ── Nav ── -->
 <header class="glass-nav" style="position:sticky;top:0;z-index:50;">
-  <div style="max-width:none;width:100%;padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;">
+  <div style="max-width:1200px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;">
 
-    <a href="index.html" style="text-decoration:none;display:flex;align-items:center;">
+    <a href="index.html" style="text-decoration:none;display:flex;align-items:center;" aria-label="Clozet home">
       <div class="glass" style="border-radius:10px;padding:7px 14px;display:flex;align-items:center;gap:9px;">
         <svg width="17" height="14" viewBox="0 0 17 14" fill="none" stroke="#1c1410" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M8.5 1C8.5 1 11 1 11 3C11 4.2 10 5 8.5 5"/>
@@ -272,17 +350,48 @@
       </div>
     </a>
 
-    <nav style="display:flex;align-items:center;gap:30px;">
-      <a href="index.html#posts"       class="nav-link">Articles</a>
-      <a href="index.html#topics"      class="nav-link">Topics</a>
-      <a href="color-alchemist.html"   class="nav-link active">Palette</a>
-      <a href="index.html#about"       class="nav-link">About</a>
-      <a href="index.html#newsletter"  class="nav-link">Newsletter</a>
+    <nav class="desktop-nav-links" style="display:flex;align-items:center;gap:30px;" aria-label="Main navigation">
+      <a href="index.html#posts"      class="nav-link">Articles</a>
+      <a href="index.html#topics"     class="nav-link">Topics</a>
+      <a href="color-alchemist.html"  class="nav-link active">Palette</a>
+      <a href="index.html#about"      class="nav-link">About</a>
+      <a href="index.html#newsletter" class="nav-link">Newsletter</a>
     </nav>
 
-    <div style="width:120px;"></div><!-- balance -->
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button class="hamburger" id="ca-hamburger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </div>
 </header>
+
+<!-- Mobile nav overlay -->
+<div class="mobile-nav" id="ca-mobile-nav" role="dialog" aria-label="Mobile navigation">
+  <a href="index.html#posts"      class="mobile-nav-link" onclick="closeCaNav()">Articles</a>
+  <a href="index.html#topics"     class="mobile-nav-link" onclick="closeCaNav()">Topics</a>
+  <a href="color-alchemist.html"  class="mobile-nav-link">Palette</a>
+  <a href="index.html#about"      class="mobile-nav-link" onclick="closeCaNav()">About</a>
+  <a href="index.html#newsletter" class="mobile-nav-link" onclick="closeCaNav()">Newsletter</a>
+</div>
+
+<script>
+  const caHamburger = document.getElementById('ca-hamburger');
+  const caMobileNav = document.getElementById('ca-mobile-nav');
+  function closeCaNav() {
+    caHamburger.classList.remove('open');
+    caMobileNav.classList.remove('open');
+    caHamburger.setAttribute('aria-expanded','false');
+    document.body.style.overflow = '';
+  }
+  caHamburger.addEventListener('click', () => {
+    const isOpen = caMobileNav.classList.toggle('open');
+    caHamburger.classList.toggle('open', isOpen);
+    caHamburger.setAttribute('aria-expanded', String(isOpen));
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCaNav(); });
+</script>
 
 
 <!-- ── Tool ── -->
@@ -324,6 +433,11 @@
     <!-- 6. Formalness -->
     <div class="section-label">6. Formalness</div>
     <div class="pills" id="formal-pills"></div>
+
+    <!-- 7. Avoid Colors -->
+    <div class="section-label">7. Avoid these colors</div>
+    <p style="font-size:11px;color:rgba(28,20,16,0.40);line-height:1.5;margin-bottom:10px;">Colors you don't own or don't want in your palette.</p>
+    <div class="exclude-grid" id="exclude-grid"></div>
 
     <!-- Divider -->
     <div style="height:1px;background:rgba(28,20,16,0.08);margin:28px 0 0;"></div>
@@ -374,6 +488,20 @@
   // Keyed by anchorColor → formalness → palette
   // ─────────────────────────────────────────────
   const PALETTES = {
+    black: {
+      streetwear:    { name: "Void Walker",         desc: "Gold tears through all-black with exactly the right amount of disruption — bold but still wearable on the street.", c: [["#111111","Black"],["#c8b87e","Antique Gold"],["#ede8df","Bone"]] },
+      relaxed:       { name: "Black Ease",           desc: "Black and white is a cliché because it works. Camel is the twist that makes this version feel lived-in and considered.", c: [["#111111","Black"],["#f8f6f2","White"],["#c19a6b","Camel"]] },
+      "smart casual":{ name: "Ink & Stone",          desc: "Graphite softens the intensity of all-black. Linen keeps the palette approachable without losing its edge.", c: [["#111111","Black"],["#4a5568","Graphite"],["#f2ede2","Linen"]] },
+      business:      { name: "Power Void",           desc: "The most authoritative business palette. Midnight and ivory add depth without breaking the dark confidence of the anchor.", c: [["#111111","Black"],["#1b1f2d","Midnight"],["#f8f6f2","Ivory"]] },
+      formal:        { name: "Noir Ceremony",        desc: "Black elevated for evening. Champagne gold and ivory are the only things that can compete with this much depth.", c: [["#111111","Black"],["#c9a84c","Champagne Gold"],["#f8f6f2","Ivory"]] },
+    },
+    white: {
+      streetwear:    { name: "Clean Sheet",          desc: "White as a blank canvas. Midnight and rust provide high-contrast energy without overwhelming the lightness of the base.", c: [["#f9f9f7","White"],["#1b1f2d","Midnight"],["#b5451b","Rust"]] },
+      relaxed:       { name: "White Linen",          desc: "All-white done right — sage and cream add botanical warmth that stops the palette from feeling clinical or cold.", c: [["#f9f9f7","White"],["#6b8a6e","Sage"],["#f5ead5","Cream"]] },
+      "smart casual":{ name: "White Collar",         desc: "White grounded by navy and softened by slate — a combination that's crisp, clean, and quietly confident.", c: [["#f9f9f7","White"],["#1e3a5f","Navy"],["#8097a8","Slate"]] },
+      business:      { name: "Blank Authority",      desc: "White in the boardroom reads as radical confidence. Navy and charcoal give it the structure it needs to hold the room.", c: [["#f9f9f7","White"],["#1e3a5f","Navy"],["#4a5568","Charcoal"]] },
+      formal:        { name: "White Ceremony",       desc: "White with gold and midnight creates a palette of striking formal contrast — classical, architectural, and completely intentional.", c: [["#f9f9f7","White"],["#c9a84c","Champagne Gold"],["#1b1f2d","Midnight"]] },
+    },
     midnight: {
       streetwear:    { name: "Night Voltage",      desc: "An unexpected gold accent electrifies a deep foundation. Bone keeps it wearable without softening the edge.", c: [["#1b1f2d","Midnight"],["#c8b87e","Antique Gold"],["#ede8df","Bone"]] },
       relaxed:       { name: "Quiet Depth",         desc: "Mist slate acts as a tonal bridge — keeping the depth of midnight grounded but breathable.", c: [["#1b1f2d","Midnight"],["#8097a8","Mist Slate"],["#f5f0e8","Warm Cream"]] },
@@ -464,6 +592,8 @@
   // SELECTOR DATA
   // ─────────────────────────────────────────────
   const COLORS = [
+    { id: "black",    hex: "#111111", label: "black" },
+    { id: "white",    hex: "#f9f9f7", label: "white", border: true },
     { id: "midnight", hex: "#1b1f2d", label: "midnight" },
     { id: "olive",    hex: "#556b2f", label: "olive" },
     { id: "burgundy", hex: "#7f1d1d", label: "burgundy" },
@@ -491,6 +621,7 @@
     color: null, occasion: null,
     time: null,  elements: null,
     temp: null,  formal: null,
+    excluded: new Set(), // set of color hex strings to avoid
   };
 
   // ─────────────────────────────────────────────
@@ -567,12 +698,68 @@
   buildTemps();
   buildPills('formal-pills', FORMALS, 'formal');
 
+  // Build exclude grid — all palette colors (non-anchor) that can appear in results
+  function buildExcludeGrid() {
+    const wrap = document.getElementById('exclude-grid');
+    // All unique secondary/tertiary colors that appear in palettes
+    const EXCLUDE_COLORS = [
+      { hex: "#c8b87e", label: "gold" },
+      { hex: "#c9a84c", label: "champagne" },
+      { hex: "#ede8df", label: "bone" },
+      { hex: "#f5f0e8", label: "cream" },
+      { hex: "#f8f6f2", label: "ivory" },
+      { hex: "#8097a8", label: "slate" },
+      { hex: "#c19a6b", label: "camel" },
+      { hex: "#4a5568", label: "graphite" },
+      { hex: "#1b1f2d", label: "midnight" },
+      { hex: "#1e3a5f", label: "navy" },
+      { hex: "#b5451b", label: "rust" },
+      { hex: "#556b2f", label: "olive" },
+      { hex: "#c4a8d4", label: "lavender" },
+      { hex: "#f4c5ce", label: "blush" },
+      { hex: "#d4960a", label: "mustard" },
+      { hex: "#7f1d1d", label: "burgundy" },
+      { hex: "#6b8a6e", label: "sage" },
+      { hex: "#4a3728", label: "espresso" },
+      { hex: "#111111", label: "black" },
+      { hex: "#f9f9f7", label: "white" },
+    ];
+    EXCLUDE_COLORS.forEach(c => {
+      const btn = document.createElement('button');
+      btn.className = 'excl-btn';
+      btn.dataset.hex = c.hex;
+      btn.innerHTML = `
+        <div class="excl-circle" style="background:${c.hex};${c.hex === '#f9f9f7' || c.hex === '#f8f6f2' || c.hex === '#ede8df' || c.hex === '#f5f0e8' ? 'box-shadow:0 0 0 1px rgba(28,20,16,0.15) inset;' : ''}"></div>
+        <span class="excl-label">${c.label}</span>
+      `;
+      btn.addEventListener('click', () => {
+        if (state.excluded.has(c.hex)) {
+          state.excluded.delete(c.hex);
+          btn.classList.remove('excl');
+        } else {
+          state.excluded.add(c.hex);
+          btn.classList.add('excl');
+        }
+      });
+      wrap.appendChild(btn);
+    });
+  }
+  buildExcludeGrid();
+
   // ─────────────────────────────────────────────
   // GENERATE
   // ─────────────────────────────────────────────
+  function paletteHasExcluded(palette) {
+    if (state.excluded.size === 0) return false;
+    return palette.c.some(([hex]) => {
+      // Normalize hex for comparison (lowercase)
+      const h = hex.toLowerCase();
+      return [...state.excluded].some(ex => ex.toLowerCase() === h);
+    });
+  }
+
   function generate() {
     if (!state.color) {
-      // Wiggle the color grid to prompt selection
       const grid = document.getElementById('color-grid');
       grid.style.transition = 'transform 0.08s';
       [0, -4, 4, -3, 3, -1, 1, 0].reduce((p, x, i) =>
@@ -582,8 +769,26 @@
       return;
     }
 
-    const formalKey = state.formal || 'relaxed';
-    const palette   = PALETTES[state.color][formalKey];
+    const FORMAL_ORDER = ['relaxed','smart casual','casual','streetwear','business','formal'];
+    const formalKey    = state.formal || 'relaxed';
+    const colorPals    = PALETTES[state.color];
+
+    // Try preferred formalness first, then others in order
+    const tryOrder = [formalKey, ...FORMAL_ORDER.filter(f => f !== formalKey)];
+    let palette = null;
+    for (const key of tryOrder) {
+      const candidate = colorPals[key];
+      if (candidate && !paletteHasExcluded(candidate)) {
+        palette = candidate;
+        break;
+      }
+    }
+
+    if (!palette) {
+      // All palettes for this color have excluded colors — show warning
+      renderNoResult();
+      return;
+    }
 
     renderResult(palette);
   }
@@ -637,6 +842,18 @@
     const ctx = document.getElementById('r-context');
     ctx.innerHTML = '<span class="ctx-label">Context</span> '
       + parts.map(p => `<span class="ctx-slash">/</span> <span class="ctx-val">${p}</span>`).join(' ');
+  }
+
+  function renderNoResult() {
+    document.getElementById('empty-state').style.display = 'none';
+    const result = document.getElementById('palette-result');
+    result.classList.remove('visible');
+    void result.offsetWidth;
+    result.classList.add('visible');
+    document.getElementById('r-name').textContent = 'No match found';
+    document.getElementById('r-desc').textContent = '\u201cTry removing some excluded colors — your filters are too strict for this anchor.\u201d';
+    document.getElementById('r-swatches').innerHTML = '';
+    document.getElementById('r-context').innerHTML = '';
   }
 
 })();

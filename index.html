@@ -725,10 +725,13 @@
       color: #1c1410;
     }
 
-    @media (max-width: 600px) {
-      #wave-stage { height: 260px; }
-      .wave-svg-label { font-size: 10px; }
-      #wave-tooltip { display: none; }
+    @media (max-width: 800px) {
+      #wave-stage { height: 280px; }
+      .wave-svg-label { font-size: 26px; }
+    }
+    @media (max-width: 480px) {
+      #wave-stage { height: 240px; }
+      .wave-svg-label { font-size: 40px; }
     }
   </style>
 
@@ -796,15 +799,18 @@
 
       labels.forEach((el, i) => el.classList.toggle('active', i === idx));
 
-      // Position near label's path point
-      const pt       = ptAtT(d.t);
-      const stagePos = svgToStage(pt.x, pt.y);
+      // Position relative to label text bounding box for accuracy
+      const labelEl  = labelData[idx].el;
+      const bbox     = labelEl.getBBox(); // SVG user-space bbox
+      const bboxMidX = bbox.x + bbox.width / 2;
+      const bboxTopY = bbox.y;
+      const stagePos = svgToStage(bboxMidX, bboxTopY);
       const stageW   = stage.offsetWidth;
-      const TIP_H    = 200;
+      const TIP_H    = 92; // card height approx
 
       let tipLeft = stagePos.x - TIP_W / 2;
-      let tipTop  = stagePos.y - TIP_H - 16;
-      if (tipTop < 8) tipTop = stagePos.y + 24;
+      let tipTop  = stagePos.y - TIP_H - 12;
+      if (tipTop < 8) tipTop = stagePos.y + 18;
       tipLeft = Math.max(8, Math.min(tipLeft, stageW - TIP_W - 8));
 
       tip.style.left = tipLeft + 'px';
